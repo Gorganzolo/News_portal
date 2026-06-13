@@ -1,0 +1,61 @@
+{% extends 'default.html' %}
+
+{% block title %}{{ post.title_of_post }} — News Portal{% endblock title %}
+
+{% block content %}
+<style>
+    .article-header {
+        margin-bottom: 30px;
+    }
+
+    .article-title {
+        font-size: 28px;
+        font-weight: 600;
+        margin: 0 0 12px 0;
+        letter-spacing: -0.5px;
+        line-height: 1.25;
+    }
+
+    .article-meta {
+        font-size: 13px;
+        color: var(--text-muted);
+        font-weight: 300;
+    }
+
+    .article-content {
+        font-size: 16px;
+        line-height: 1.75;
+        color: #222;
+        font-weight: 300;
+        letter-spacing: 0.01em;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 50px;
+        font-size: 14px;
+        text-decoration: none;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 2px;
+    }
+</style>
+
+<article>
+    <div class="article-header">
+        <h1 class="article-title">{{ post.title_of_post }}</h1>
+        <div class="article-meta">
+            <span>Автор: {{ post.author.user.username }}</span>
+            &nbsp;·&nbsp;
+            <span>{{ post.data_created|date:'d E Y, H:i' }}</span>
+            &nbsp;·&nbsp;
+            <span>Рейтинг: {{ post.rating_of_post }}</span>
+        </div>
+    </div>
+
+    <div class="article-content">
+        {{ post.text_of_post|linebreaks }}
+    </div>
+
+    <a href="/news/" class="back-link">&larr; Вернуться к потоку</a>
+</article>
+{% endblock content %}
