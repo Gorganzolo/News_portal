@@ -71,7 +71,8 @@
         <div class="article-meta">
             <span>Автор: {{ post.author.user.username }}</span>
             &nbsp;·&nbsp;
-            <span>{{ post.data_created|date:'d E Y, H:i' }}</span>
+            {# Дата публикации в формате день.месяц.год #}
+            <span>{{ post.data_created|date:'d.m.Y' }}</span>
             &nbsp;·&nbsp;
             <span>Рейтинг: {{ post.rating_of_post }}</span>
         </div>
@@ -89,7 +90,7 @@
             <div class="comment-item">
                 <div class="comment-meta">
                     <strong>{{ comment.author_of_comment.username }}</strong> &nbsp;·&nbsp;
-                    <span>{{ comment.date_of_comment|date:'d E Y, H:i' }}</span>
+                    <span>{{ comment.date_of_comment|date:'d.m.Y, H:i' }}</span>
                 </div>
                 <p class="comment-text">{{ comment.comment_text }}</p>
             </div>

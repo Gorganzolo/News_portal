@@ -4,6 +4,15 @@
 
 {% block content %}
 <style>
+    .news-count {
+        font-size: 14px;
+        color: var(--text-muted);
+        margin-bottom: 20px;
+        font-weight: 400;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 10px;
+    }
+
     .posts-list {
         list-style: none;
         padding: 0;
@@ -46,9 +55,14 @@
     }
 </style>
 
+{# Количество новостей #}
+<div class="news-count">
+    Всего новостей: {{ news|length }}
+</div>
+
 {# Список всех постов #}
 <ul class="posts-list">
-    {% for post in posts %}
+    {% for post in news %}
         {# Элемент списка для каждого поста #}
         <li class="post-item">
             <h2 class="post-title">
@@ -56,8 +70,8 @@
                 <a href="{% url 'news_detail' pk=post.id %}">{{ post.title_of_post }}</a>
             </h2>
             <div class="post-meta">
-                {# Дата создания поста #}
-                <span>{{ post.data_created|date:'d E Y' }}</span>
+                {# Дата публикации в формате день.месяц.год #}
+                <span>{{ post.data_created|date:'d.m.Y' }}</span>
                 {% if post.category.all %}
                     &nbsp;·&nbsp;
                     <span>
@@ -68,8 +82,8 @@
                     </span>
                 {% endif %}
             </div>
-            {# Предпросмотр текста поста #}
-            <p class="post-body-preview">{{ post.post_preview }}</p>
+            {# Первые 20 слов текста поста #}
+            <p class="post-body-preview">{{ post.text_of_post|truncatewords:20 }}</p>
         </li>
     {% empty %}
         {# Сообщение, если постов нет #}
