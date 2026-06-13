@@ -1,6 +1,7 @@
 {% extends 'default.html' %}
+{% load custom_filters %}
 
-{% block title %}{{ post.title_of_post }} — News Portal{% endblock title %}
+{% block title %}{{ post.title_of_post|censor }} — News Portal{% endblock title %}
 
 {% block content %}
 <style>
@@ -67,7 +68,7 @@
 <article>
     {# Заголовок статьи и метаданные #}
     <div class="article-header">
-        <h1 class="article-title">{{ post.title_of_post }}</h1>
+        <h1 class="article-title">{{ post.title_of_post|censor }}</h1>
         <div class="article-meta">
             <span>Автор: {{ post.author.user.username }}</span>
             &nbsp;·&nbsp;
@@ -80,7 +81,7 @@
 
     {# Основной текст статьи #}
     <div class="article-content">
-        {{ post.text_of_post|linebreaks }}
+        {{ post.text_of_post|censor|linebreaks }}
     </div>
 
     {# Секция комментариев к посту #}
@@ -92,7 +93,7 @@
                     <strong>{{ comment.author_of_comment.username }}</strong> &nbsp;·&nbsp;
                     <span>{{ comment.date_of_comment|date:'d.m.Y, H:i' }}</span>
                 </div>
-                <p class="comment-text">{{ comment.comment_text }}</p>
+                <p class="comment-text">{{ comment.comment_text|censor }}</p>
             </div>
         {% empty %}
             <p>Комментариев пока нет.</p>
