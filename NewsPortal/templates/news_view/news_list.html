@@ -1,4 +1,5 @@
 {% extends 'default.html' %}
+{% load custom_filters %}
 
 {% block title %}Все публикации — News Portal{% endblock title %}
 
@@ -67,7 +68,7 @@
         <li class="post-item">
             <h2 class="post-title">
                 {# Ссылка на детальную страницу поста #}
-                <a href="{% url 'news_detail' pk=post.id %}">{{ post.title_of_post }}</a>
+                <a href="{% url 'news_detail' pk=post.id %}">{{ post.title_of_post|censor }}</a>
             </h2>
             <div class="post-meta">
                 {# Дата публикации в формате день.месяц.год #}
@@ -82,8 +83,8 @@
                     </span>
                 {% endif %}
             </div>
-            {# Первые 20 слов текста поста #}
-            <p class="post-body-preview">{{ post.text_of_post|truncatewords:20 }}</p>
+            {# Первые 20 слов текста поста, с применением цензуры #}
+            <p class="post-body-preview">{{ post.text_of_post|censor|truncatewords:20 }}</p>
         </li>
     {% empty %}
         {# Сообщение, если постов нет #}
