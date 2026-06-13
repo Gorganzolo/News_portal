@@ -3,24 +3,26 @@ from django.contrib.auth.models import User
 from django.db.models import Sum
 
 
-# Create your models here.
-
+# Категории новостей/статей
 class Category(models.Model):
     name_category = models.CharField(max_length=100, unique=True)
 
 
+# Автор (связан с пользователем)
 class Author(models.Model):
     rating = models.IntegerField(default=0)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def update_rating(self):
-        sum_rating_of_post = self.post_set.aggregate(Sum('rating_of_post'))['rating_of_post__sum']
+        """Обновляет рейтинг автора по постам и комментариям"""
+        sum_rating_of_post = self.post_set.aggregate(Sum('rating_of_post'))['rating_of_post__sum'] or 0
         sum_rating_of_post *= 3
         sum_rating_of_comment = self.user.comment_set.aggregate(Sum('rating_of_comment'))['rating_of_comment__sum'] or 0
         sum_rating_of_comment_on_post = Comment.objects.filter(link_comment__author=self).aggregate(Sum('rating_of_comment'))['rating_of_comment__sum'] or 0
         self.rating = sum_rating_of_post + sum_rating_of_comment + sum_rating_of_comment_on_post
         self.save()
 
+# Пост (новость или статья)
 class Post(models.Model):
 
     article = 'AR'
@@ -40,16 +42,21 @@ class Post(models.Model):
     rating_of_post = models.IntegerField(default=0)
 
     def like(self):
+        """Лайк посту"""
         self.rating_of_post += 1
         self.save()
+
     def dislike(self):
+        """Дизлайк посту"""
         self.rating_of_post -= 1
         self.save()
 
     def post_preview(self):
+        """Предпросмотр текста поста"""
         return self.text_of_post[:124] + "..."
 
 
+# Комментарий к посту
 class Comment(models.Model):
     link_comment = models.ForeignKey('Post', on_delete=models.CASCADE)
     author_of_comment = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -58,17 +65,17 @@ class Comment(models.Model):
     rating_of_comment = models.IntegerField(default=0)
 
     def like(self):
+        """Лайк комментарию"""
         self.rating_of_comment += 1
         self.save()
+
     def dislike(self):
+        """Дизлайк комментарию"""
         self.rating_of_comment -= 1
         self.save()
 
 
+# Связь поста и категории
 class PostCategory(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
-
-
-
-

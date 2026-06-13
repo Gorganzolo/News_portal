@@ -30,9 +30,33 @@
         letter-spacing: 0.01em;
     }
 
+    .comments-section {
+        margin-top: 40px;
+        border-top: 1px solid var(--border-color);
+        padding-top: 20px;
+    }
+
+    .comment-item {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px dashed #eee;
+    }
+
+    .comment-meta {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-bottom: 5px;
+    }
+
+    .comment-text {
+        font-size: 14px;
+        color: #444;
+        margin: 0;
+    }
+
     .back-link {
         display: inline-block;
-        margin-top: 50px;
+        margin-top: 30px;
         font-size: 14px;
         text-decoration: none;
         border-bottom: 1px solid var(--border-color);
@@ -41,6 +65,7 @@
 </style>
 
 <article>
+    {# Заголовок статьи и метаданные #}
     <div class="article-header">
         <h1 class="article-title">{{ post.title_of_post }}</h1>
         <div class="article-meta">
@@ -52,10 +77,28 @@
         </div>
     </div>
 
+    {# Основной текст статьи #}
     <div class="article-content">
         {{ post.text_of_post|linebreaks }}
     </div>
 
+    {# Секция комментариев к посту #}
+    <div class="comments-section">
+        <h3>Комментарии ({{ post.comment_set.count }})</h3>
+        {% for comment in post.comment_set.all %}
+            <div class="comment-item">
+                <div class="comment-meta">
+                    <strong>{{ comment.author_of_comment.username }}</strong> &nbsp;·&nbsp;
+                    <span>{{ comment.date_of_comment|date:'d E Y, H:i' }}</span>
+                </div>
+                <p class="comment-text">{{ comment.comment_text }}</p>
+            </div>
+        {% empty %}
+            <p>Комментариев пока нет.</p>
+        {% endfor %}
+    </div>
+
+    {# Ссылка для возврата на главную #}
     <a href="/news/" class="back-link">&larr; Вернуться к потоку</a>
 </article>
 {% endblock content %}
