@@ -7,6 +7,8 @@ from django.db.models import Sum
 class Category(models.Model):
     name_category = models.CharField(max_length=100, unique=True)
 
+    def __str__(self):
+        return self.name_category
 
 # Автор (связан с пользователем)
 class Author(models.Model):
@@ -21,6 +23,9 @@ class Author(models.Model):
         sum_rating_of_comment_on_post = Comment.objects.filter(link_comment__author=self).aggregate(Sum('rating_of_comment'))['rating_of_comment__sum'] or 0
         self.rating = sum_rating_of_post + sum_rating_of_comment + sum_rating_of_comment_on_post
         self.save()
+
+    def __str__(self):
+        return self.user.username
 
 # Пост (новость или статья)
 class Post(models.Model):
