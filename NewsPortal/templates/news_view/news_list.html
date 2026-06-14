@@ -4,73 +4,25 @@
 {% block title %}Все публикации — News Portal{% endblock title %}
 
 {% block content %}
-<style>
-    .news-count {
-        font-size: 14px;
-        color: var(--text-muted);
-        margin-bottom: 20px;
-        font-weight: 400;
-        border-bottom: 1px solid var(--border-color);
-        padding-bottom: 10px;
-    }
-
-    .posts-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .post-item {
-        margin-bottom: 45px;
-    }
-
-    .post-title {
-        font-size: 20px;
-        font-weight: 500;
-        margin: 0 0 8px 0;
-        letter-spacing: -0.3px;
-    }
-
-    .post-title a {
-        color: var(--text-color);
-        text-decoration: none;
-    }
-
-    .post-title a:hover {
-        opacity: 0.7;
-    }
-
-    .post-meta {
-        font-size: 13px;
-        color: var(--text-muted);
-        margin-bottom: 12px;
-        font-weight: 300;
-    }
-
-    .post-body-preview {
-        font-size: 15px;
-        line-height: 1.6;
-        color: #333;
-        margin: 0;
-        font-weight: 300;
-    }
-</style>
+<!-- Начало блока контента -->
 
 {# Количество новостей #}
-<div class="news-count">
+<div>
     Всего новостей: {{ news|length }}
 </div>
 
+<hr>
+
 {# Список всех постов #}
-<ul class="posts-list">
+<ul>
     {% for post in news %}
         {# Элемент списка для каждого поста #}
-        <li class="post-item">
-            <h2 class="post-title">
+        <li>
+            <h2>
                 {# Ссылка на детальную страницу поста #}
                 <a href="{% url 'news_detail' pk=post.id %}">{{ post.title_of_post|censor }}</a>
             </h2>
-            <div class="post-meta">
+            <div>
                 {# Дата публикации в формате день.месяц.год #}
                 <span>{{ post.data_created|date:'d.m.Y' }}</span>
                 {% if post.category.all %}
@@ -84,11 +36,13 @@
                 {% endif %}
             </div>
             {# Первые 20 слов текста поста, с применением цензуры #}
-            <p class="post-body-preview">{{ post.text_of_post|censor|truncatewords:20 }}</p>
+            <p>{{ post.text_of_post|censor|truncatewords:20 }}</p>
         </li>
     {% empty %}
         {# Сообщение, если постов нет #}
         <li>Пока здесь пусто.</li>
     {% endfor %}
 </ul>
+
+<!-- Конец блока контента -->
 {% endblock content %}
