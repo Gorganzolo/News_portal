@@ -1,0 +1,166 @@
+{% extends 'default.html' %}
+{% load custom_filters %}
+
+{% block title %}Поиск новостей — News Portal{% endblock title %}
+
+{% block content %}
+<style>
+    .search-form {
+        margin-bottom: 30px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+    }
+    .search-form form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .search-form .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+    .search-form label {
+        font-weight: 500;
+        margin-bottom: 5px;
+    }
+    .search-form input[type="text"],
+    .search-form input[type="date"] {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+    .search-form button {
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        align-self: flex-start;
+    }
+    .search-form button:hover {
+        background-color: #0056b3;
+    }
+
+    .posts-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .post-item {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .post-title {
+        font-size: 18px;
+        font-weight: 500;
+        margin: 0 0 8px 0;
+    }
+
+    .post-title a {
+        color: var(--text-color);
+        text-decoration: none;
+    }
+
+    .post-title a:hover {
+        opacity: 0.7;
+    }
+
+    .post-meta {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-bottom: 10px;
+    }
+
+    .pagination {
+        display: flex;
+        gap: 10px;
+        margin-top: 30px;
+        padding-top: 20px;
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .pagination a, .pagination span {
+        padding: 5px 10px;
+        text-decoration: none;
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    .pagination .current {
+        background-color: #eee;
+        font-weight: bold;
+    }
+
+    .pagination a:hover {
+        background-color: #f5f5f5;
+    }
+</style>
+
+<h2>Поиск новостей</h2>
+
+<div class="search-form">
+    <form action="" method="get">
+        {{ filterset.form.as_p }}
+        <button type="submit">Найти</button>
+    </form>
+</div>
+
+<h3>Результаты: {{ paginator.count }}</h3>
+
+{# Список всех найденных постов #}
+<ul class="posts-list">
+    {% for post in news %}
+        <li class="post-item">
+            <h2 class="post-title">
+                <a href="{% url 'news_detail' pk=post.id %}">{{ post.title_of_post|censor }}</a>
+            </h2>
+            <div class="post-meta">
+                <span>{{ post.data_created|date:'d.m.Y' }}</span>
+                &nbsp;·&nbsp;
+                <span>Автор: {{ post.author.user.username }}</span>
+            </div>
+            <p>{{ post.text_of_post|censor|truncatewords:20 }}</p>
+        </li>
+    {% empty %}
+        <li>Ничего не найдено.</li>
+    {% endfor %}
+</ul>
+
+{# Пагинация #}
+{% if is_paginated %}
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+            <li><a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page=1">&laquo; 1</a></li>
+            {% if page_obj.previous_page_number != 1 %}
+                <li><a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}">Назад</a></li>
+            {% endif %}
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <li><span class="current">{{ num }}</span></li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li><a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            {% if page_obj.next_page_number != paginator.num_pages %}
+                <li><a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}">Вперед</a></li>
+            {% endif %}
+            <li><a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ paginator.num_pages }}">{{ paginator.num_pages }} &raquo;</a></li>
+        {% endif %}
+    </ul>
+{% endif %}
+{% endblock content %}

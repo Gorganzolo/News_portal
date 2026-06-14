@@ -1,0 +1,87 @@
+{% extends 'default.html' %}
+{% load custom_filters %}
+
+{% block title %}
+{% if request.resolver_match.url_name == 'news_create' or request.resolver_match.url_name == 'article_create' %}
+Создание публикации
+{% else %}
+Редактирование публикации
+{% endif %}
+— News Portal
+{% endblock title %}
+
+{% block content %}
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 30px;
+        background-color: #f9f9f9;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+    .form-group label {
+        margin-bottom: 5px;
+        font-weight: 500;
+    }
+    .form-group input, .form-group textarea, .form-group select {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+    .form-actions {
+        margin-top: 30px;
+        display: flex;
+        gap: 15px;
+    }
+    .btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        text-align: center;
+    }
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+</style>
+
+<div class="form-container">
+    <h2>
+        {% if request.resolver_match.url_name == 'news_create' or request.resolver_match.url_name == 'article_create' %}
+        Добавить публикацию
+        {% else %}
+        Редактировать публикацию
+        {% endif %}
+    </h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a href="javascript:history.back()" class="btn btn-secondary">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock content %}
