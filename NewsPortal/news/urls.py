@@ -3,7 +3,7 @@ from .views import (
     PostListView, PostDetailView, PostSearchView,
     NewsCreateView, NewsUpdateView, NewsDeleteView,
     ArticleCreateView, ArticleUpdateView, ArticleDeleteView,
-    like_post, dislike_post, ProfileView, become_author
+    like_post, dislike_post, ProfileView, become_author, add_comment
 )
 
 urlpatterns = [
@@ -23,6 +23,9 @@ urlpatterns = [
     # Лайки и дизлайки
     path('<int:pk>/like/', like_post, name='like_post'),
     path('<int:pk>/dislike/', dislike_post, name='dislike_post'),
+
+    # Комментарии
+    path('<int:pk>/comment/', add_comment, name='add_comment'),
 
     # Пути для статей (префикс 'news/' убирается на уровне NewsPortal/urls.py)
     # Обратите внимание: в задании указаны пути /articles/...

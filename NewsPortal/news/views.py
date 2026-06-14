@@ -10,10 +10,17 @@ class PostListView(ListView):
     paginate_by = 10 # Постраничный вывод, по 10 новостей на страницу
 
 # Представление для вывода конкретной новости (поста)
+from .forms import CommentForm
+
 class PostDetailView(DetailView):
     model = Post
     template_name = 'news_view/news_detail.html'
     context_object_name = 'post'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comment_form'] = CommentForm()
+        return context
 
 # Представление для поиска новостей
 from .filters import PostFilter
@@ -37,7 +44,7 @@ class PostSearchView(ListView):
 
 # CRUD для новостей и статей
 from django.views.generic import CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from .forms import PostForm
 
@@ -69,11 +76,15 @@ class ArticleCreateView(PermissionRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy('news_detail', kwargs={'pk': self.object.pk})
 
-class NewsUpdateView(PermissionRequiredMixin, UpdateView):
+class NewsUpdateView(PermissionRequiredMixin, UserPassesTestMixin, UpdateView):
     permission_required = ('news.change_post',)
     form_class = PostForm
     model = Post
     template_name = 'news_view/post_edit.html'
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.author.user == self.request.user
 
     def get_queryset(self):
         return super().get_queryset().filter(choice=Post.news)
@@ -81,11 +92,15 @@ class NewsUpdateView(PermissionRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('news_detail', kwargs={'pk': self.object.pk})
 
-class ArticleUpdateView(PermissionRequiredMixin, UpdateView):
+class ArticleUpdateView(PermissionRequiredMixin, UserPassesTestMixin, UpdateView):
     permission_required = ('news.change_post',)
     form_class = PostForm
     model = Post
     template_name = 'news_view/post_edit.html'
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.author.user == self.request.user
 
     def get_queryset(self):
         return super().get_queryset().filter(choice=Post.article)
@@ -93,18 +108,26 @@ class ArticleUpdateView(PermissionRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('news_detail', kwargs={'pk': self.object.pk})
 
-class NewsDeleteView(DeleteView):
+class NewsDeleteView(UserPassesTestMixin, DeleteView):
     model = Post
     template_name = 'news_view/post_delete.html'
     success_url = reverse_lazy('news_list')
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.author.user == self.request.user
 
     def get_queryset(self):
         return super().get_queryset().filter(choice=Post.news)
 
-class ArticleDeleteView(DeleteView):
+class ArticleDeleteView(UserPassesTestMixin, DeleteView):
     model = Post
     template_name = 'news_view/post_delete.html'
     success_url = reverse_lazy('news_list')
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.author.user == self.request.user
 
     def get_queryset(self):
         return super().get_queryset().filter(choice=Post.article)
@@ -163,4 +186,16 @@ def like_post(request, pk):
 def dislike_post(request, pk):
     post = get_object_or_404(Post, id=pk)
     post.dislike()
+    return redirect('news_detail', pk=pk)
+
+@login_required
+def add_comment(request, pk):
+    post = get_object_or_404(Post, id=pk)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.link_comment = post
+            comment.author_of_comment = request.user
+            comment.save()
     return redirect('news_detail', pk=pk)

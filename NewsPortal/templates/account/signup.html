@@ -1,5 +1,6 @@
 {% extends "default.html" %}
 {% load i18n %}
+{% load account socialaccount %}
 
 {% block title %}{% trans "Signup" %}{% endblock %}
 
@@ -78,6 +79,26 @@
         color: #4a5568;
         text-decoration: none;
     }
+    .social-auth {
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #e2e8f0;
+    }
+    .btn-social {
+        display: inline-block;
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        text-decoration: none;
+        color: #4a5568;
+        border: 1px solid #cbd5e0;
+        transition: all 0.2s ease;
+        box-sizing: border-box;
+    }
+    .btn-social:hover {
+        background-color: #edf2f7;
+    }
     .auth-links a:hover {
         text-decoration: underline;
     }
@@ -94,6 +115,14 @@
         {% endif %}
         <button class="btn-auth" type="submit">Зарегистрироваться</button>
     </form>
+
+    {% get_providers as socialaccount_providers %}
+    {% if socialaccount_providers %}
+        <div class="social-auth">
+            <p style="font-size: 14px; color: #718096; margin-bottom: 15px;">Или зарегистрируйтесь через:</p>
+            {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+        </div>
+    {% endif %}
 
     <div class="auth-links">
         <p>Уже есть аккаунт? <a href="{{ login_url }}">Войти</a></p>
