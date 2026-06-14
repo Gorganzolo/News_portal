@@ -68,22 +68,84 @@
         gap: 15px;
         flex-wrap: wrap;
     }
+    .author-section {
+        margin-top: 40px;
+        border-top: 1px solid #e2e8f0;
+        padding-top: 30px;
+    }
+    .author-section h3 {
+        color: #2d3748;
+        font-weight: 600;
+        margin-top: 0;
+        margin-bottom: 20px;
+    }
+    .author-actions {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 25px;
+    }
+    .user-posts-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .user-post-item {
+        border: 1px solid #edf2f7;
+        border-radius: 6px;
+        padding: 15px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: box-shadow 0.2s ease;
+    }
+    .user-post-item:hover {
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    .post-info-small h4 {
+        margin: 0 0 5px 0;
+        font-size: 16px;
+    }
+    .post-info-small h4 a {
+        color: #2d3748;
+        text-decoration: none;
+    }
+    .post-info-small h4 a:hover {
+        opacity: 0.7;
+    }
+    .post-meta-small {
+        font-size: 13px;
+        color: #718096;
+    }
+    .post-actions-small {
+        display: flex;
+        gap: 10px;
+    }
+    .btn-small {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
 </style>
 
 <div class="profile-container">
-    <h2 class="profile-header">Профиль пользователя</h2>
+    <h2 class="profile-header">Личный кабинет</h2>
 
     <div class="profile-info">
-        <p><strong>Имя пользователя (Username):</strong> {{ user.username }}</p>
-        <p><strong>Email:</strong> {{ user.email|default:"Не указан" }}</p>
-        <p>
-            <strong>Группы:</strong>
-            {% for group in user.groups.all %}
-                {{ group.name }}{% if not forloop.last %}, {% endif %}
-            {% empty %}
-                Нет групп
-            {% endfor %}
-        </p>
+        <form method="post" style="display: flex; flex-direction: column; gap: 15px;">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <p>
+                <strong>Группы:</strong>
+                {% for group in user.groups.all %}
+                    {{ group.name }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    Нет групп
+                {% endfor %}
+            </p>
+
+            <button type="submit" class="btn btn-primary" style="align-self: flex-start;">Сохранить изменения</button>
+        </form>
     </div>
 
     <div class="actions">
@@ -93,8 +155,6 @@
                 {% csrf_token %}
                 <button type="submit" class="btn btn-primary">Стать автором</button>
             </form>
-        {% else %}
-            <span class="btn btn-outline" style="cursor: default;">Вы уже автор</span>
         {% endif %}
 
         <form action="/accounts/logout/" method="post" style="display:inline;">
@@ -102,5 +162,40 @@
             <button type="submit" class="btn btn-outline">Выйти</button>
         </form>
     </div>
+
+    {% if is_author %}
+        <div class="author-section">
+            <h3>Управление публикациями</h3>
+
+            <div class="author-actions">
+                <a href="{% url 'news_create' %}" class="btn btn-primary btn-small">+ Создать новость</a>
+                <a href="{% url 'article_create' %}" class="btn btn-primary btn-small">+ Создать статью</a>
+            </div>
+
+            <ul class="user-posts-list">
+                {% for post in user_posts %}
+                    <li class="user-post-item">
+                        <div class="post-info-small">
+                            <h4><a href="{% url 'news_detail' post.id %}">{{ post.title_of_post|censor }}</a></h4>
+                            <div class="post-meta-small">
+                                {{ post.get_choice_display }} &middot; {{ post.data_created|date:'d.m.Y' }} &middot; Рейтинг: {{ post.rating_of_post }}
+                            </div>
+                        </div>
+                        <div class="post-actions-small">
+                            {% if post.choice == 'NW' %}
+                                <a href="{% url 'news_update' post.id %}" class="btn btn-outline btn-small">Ред.</a>
+                                <a href="{% url 'news_delete' post.id %}" class="btn btn-outline btn-small" style="color: #e53e3e; border-color: #fc8181;">Удалить</a>
+                            {% elif post.choice == 'AR' %}
+                                <a href="{% url 'article_update' post.id %}" class="btn btn-outline btn-small">Ред.</a>
+                                <a href="{% url 'article_delete' post.id %}" class="btn btn-outline btn-small" style="color: #e53e3e; border-color: #fc8181;">Удалить</a>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% empty %}
+                    <p style="color: #718096; font-size: 14px;">У вас пока нет публикаций.</p>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 </div>
 {% endblock content %}

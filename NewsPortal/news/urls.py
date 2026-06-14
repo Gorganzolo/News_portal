@@ -7,7 +7,8 @@ from .views import (
 )
 
 urlpatterns = [
-    # Профиль
+    # Профиль (У Allauth по умолчанию LOGIN_REDIRECT_URL = '/accounts/profile/')
+    # Мы переопределяем его на уровне news
     path('profile/', ProfileView.as_view(), name='profile'),
     path('profile/become-author/', become_author, name='become_author'),
 
