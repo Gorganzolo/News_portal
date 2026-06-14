@@ -103,3 +103,16 @@ class ArticleDeleteView(DeleteView):
 
     def get_queryset(self):
         return super().get_queryset().filter(choice=Post.article)
+
+# Лайки и дизлайки
+from django.shortcuts import get_object_or_404, redirect
+
+def like_post(request, pk):
+    post = get_object_or_404(Post, id=pk)
+    post.like()
+    return redirect('news_detail', pk=pk)
+
+def dislike_post(request, pk):
+    post = get_object_or_404(Post, id=pk)
+    post.dislike()
+    return redirect('news_detail', pk=pk)

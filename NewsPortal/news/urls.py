@@ -2,7 +2,8 @@ from django.urls import path
 from .views import (
     PostListView, PostDetailView, PostSearchView,
     NewsCreateView, NewsUpdateView, NewsDeleteView,
-    ArticleCreateView, ArticleUpdateView, ArticleDeleteView
+    ArticleCreateView, ArticleUpdateView, ArticleDeleteView,
+    like_post, dislike_post
 )
 
 urlpatterns = [
@@ -13,6 +14,10 @@ urlpatterns = [
     path('create/', NewsCreateView.as_view(), name='news_create'),
     path('<int:pk>/edit/', NewsUpdateView.as_view(), name='news_update'),
     path('<int:pk>/delete/', NewsDeleteView.as_view(), name='news_delete'),
+
+    # Лайки и дизлайки
+    path('<int:pk>/like/', like_post, name='like_post'),
+    path('<int:pk>/dislike/', dislike_post, name='dislike_post'),
 
     # Пути для статей (префикс 'news/' убирается на уровне NewsPortal/urls.py)
     # Обратите внимание: в задании указаны пути /articles/...

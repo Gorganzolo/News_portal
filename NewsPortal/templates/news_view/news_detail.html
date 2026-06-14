@@ -63,6 +63,79 @@
         border-bottom: 1px solid var(--border-color);
         padding-bottom: 2px;
     }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 25px;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 8px 16px;
+        font-size: 14px;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        background-color: transparent;
+        cursor: pointer;
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+        font-family: inherit;
+    }
+
+    .btn:hover {
+        background-color: #f5f5f5;
+        border-color: #d0d0d0;
+    }
+
+    .btn-edit {
+        color: #4a5568;
+    }
+
+    .btn-delete {
+        color: #e53e3e;
+        border-color: #fc8181;
+    }
+
+    .btn-delete:hover {
+        background-color: #fff5f5;
+        border-color: #e53e3e;
+    }
+
+    .btn-like {
+        color: #38a169;
+        border-color: #9ae6b4;
+    }
+
+    .btn-like:hover {
+        background-color: #f0fff4;
+        border-color: #38a169;
+    }
+
+    .btn-dislike {
+        color: #e53e3e;
+        border-color: #fc8181;
+    }
+
+    .btn-dislike:hover {
+        background-color: #fff5f5;
+        border-color: #e53e3e;
+    }
+
+    .rating-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 10px;
+        background-color: #edf2f7;
+        border-radius: 20px;
+        font-weight: 500;
+        font-size: 13px;
+        color: #2d3748;
+    }
 </style>
 
 <article>
@@ -82,6 +155,27 @@
     {# Основной текст статьи #}
     <div class="article-content">
         {{ post.text_of_post|censor|linebreaks }}
+    </div>
+
+    {# Кнопки действий: Лайк, Дизлайк, Редактировать, Удалить #}
+    <div class="action-buttons">
+        <a href="{% url 'like_post' post.id %}" class="btn btn-like">
+            👍 Лайк
+        </a>
+        <span class="rating-badge">Рейтинг: {{ post.rating_of_post }}</span>
+        <a href="{% url 'dislike_post' post.id %}" class="btn btn-dislike">
+            👎 Дизлайк
+        </a>
+
+        <div style="flex-grow: 1;"></div> {# Распорка #}
+
+        {% if post.choice == 'NW' %}
+            <a href="{% url 'news_update' post.id %}" class="btn btn-edit">Редактировать</a>
+            <a href="{% url 'news_delete' post.id %}" class="btn btn-delete">Удалить</a>
+        {% elif post.choice == 'AR' %}
+            <a href="{% url 'article_update' post.id %}" class="btn btn-edit">Редактировать</a>
+            <a href="{% url 'article_delete' post.id %}" class="btn btn-delete">Удалить</a>
+        {% endif %}
     </div>
 
     {# Секция комментариев к посту #}
