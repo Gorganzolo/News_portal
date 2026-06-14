@@ -1,0 +1,130 @@
+{% extends "default.html" %}
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+<style>
+    .auth-container {
+        max-width: 400px;
+        margin: 60px auto;
+        padding: 40px;
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        text-align: center;
+    }
+    .auth-container h1 {
+        margin-top: 0;
+        margin-bottom: 25px;
+        color: #2d3748;
+        font-weight: 600;
+        letter-spacing: -0.5px;
+        font-size: 24px;
+    }
+    .auth-form p {
+        text-align: left;
+        margin-bottom: 15px;
+    }
+    .auth-form label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+        color: #4a5568;
+        font-size: 14px;
+    }
+    .auth-form input[type="text"],
+    .auth-form input[type="password"],
+    .auth-form input[type="email"] {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #cbd5e0;
+        border-radius: 6px;
+        font-size: 15px;
+        color: #2d3748;
+        box-sizing: border-box;
+        transition: border-color 0.2s ease;
+        background-color: #fcfcfc;
+    }
+    .auth-form input:focus {
+        outline: none;
+        border-color: #a0aec0;
+        background-color: #fff;
+    }
+    .btn-auth {
+        width: 100%;
+        padding: 12px;
+        margin-top: 15px;
+        font-size: 15px;
+        border-radius: 6px;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.2s ease;
+        font-weight: 500;
+        border: 1px solid transparent;
+        background-color: #4a5568;
+        color: white;
+    }
+    .btn-auth:hover {
+        background-color: #2d3748;
+    }
+    .social-auth {
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #e2e8f0;
+    }
+    .btn-social {
+        display: inline-block;
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        text-decoration: none;
+        color: #4a5568;
+        border: 1px solid #cbd5e0;
+        transition: all 0.2s ease;
+        box-sizing: border-box;
+    }
+    .btn-social:hover {
+        background-color: #edf2f7;
+    }
+    .auth-links {
+        margin-top: 20px;
+        font-size: 14px;
+    }
+    .auth-links a {
+        color: #4a5568;
+        text-decoration: none;
+    }
+    .auth-links a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="auth-container">
+    <h1>Вход в систему</h1>
+
+    <form class="auth-form" method="POST" action="{% url 'account_login' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+        <button class="btn-auth" type="submit">Войти</button>
+    </form>
+
+    {% get_providers as socialaccount_providers %}
+    {% if socialaccount_providers %}
+        <div class="social-auth">
+            <p style="font-size: 14px; color: #718096; margin-bottom: 15px;">Или войдите через:</p>
+            {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+        </div>
+    {% endif %}
+
+    <div class="auth-links">
+        <p>Нет аккаунта? <a href="{{ signup_url }}">Зарегистрироваться</a></p>
+    </div>
+</div>
+{% endblock %}

@@ -3,10 +3,14 @@ from .views import (
     PostListView, PostDetailView, PostSearchView,
     NewsCreateView, NewsUpdateView, NewsDeleteView,
     ArticleCreateView, ArticleUpdateView, ArticleDeleteView,
-    like_post, dislike_post
+    like_post, dislike_post, ProfileView, become_author
 )
 
 urlpatterns = [
+    # Профиль
+    path('profile/', ProfileView.as_view(), name='profile'),
+    path('profile/become-author/', become_author, name='become_author'),
+
     # Пути для новостей
     path('', PostListView.as_view(), name='news_list'),
     path('search/', PostSearchView.as_view(), name='news_search'),

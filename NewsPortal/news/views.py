@@ -37,10 +37,12 @@ class PostSearchView(ListView):
 
 # CRUD для новостей и статей
 from django.views.generic import CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse_lazy
 from .forms import PostForm
 
-class NewsCreateView(CreateView):
+class NewsCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = ('news.add_post',)
     form_class = PostForm
     model = Post
     template_name = 'news_view/post_edit.html'
@@ -53,7 +55,8 @@ class NewsCreateView(CreateView):
     def get_success_url(self):
         return reverse_lazy('news_detail', kwargs={'pk': self.object.pk})
 
-class ArticleCreateView(CreateView):
+class ArticleCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = ('news.add_post',)
     form_class = PostForm
     model = Post
     template_name = 'news_view/post_edit.html'
@@ -66,7 +69,8 @@ class ArticleCreateView(CreateView):
     def get_success_url(self):
         return reverse_lazy('news_detail', kwargs={'pk': self.object.pk})
 
-class NewsUpdateView(UpdateView):
+class NewsUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ('news.change_post',)
     form_class = PostForm
     model = Post
     template_name = 'news_view/post_edit.html'
@@ -77,7 +81,8 @@ class NewsUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('news_detail', kwargs={'pk': self.object.pk})
 
-class ArticleUpdateView(UpdateView):
+class ArticleUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ('news.change_post',)
     form_class = PostForm
     model = Post
     template_name = 'news_view/post_edit.html'
@@ -103,6 +108,31 @@ class ArticleDeleteView(DeleteView):
 
     def get_queryset(self):
         return super().get_queryset().filter(choice=Post.article)
+
+# Профиль и авторизация
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import Group
+from django.views.generic import TemplateView
+from django.contrib.auth.decorators import login_required
+from .models import Author
+
+class ProfileView(LoginRequiredMixin, TemplateView):
+    template_name = 'news_view/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_author'] = self.request.user.groups.filter(name='authors').exists()
+        return context
+
+@login_required
+def become_author(request):
+    user = request.user
+    authors_group = Group.objects.get(name='authors')
+    if not user.groups.filter(name='authors').exists():
+        user.groups.add(authors_group)
+        # Также создаем запись Author, чтобы пользователь мог создавать посты
+        Author.objects.get_or_create(user=user)
+    return redirect('profile')
 
 # Лайки и дизлайки
 from django.shortcuts import get_object_or_404, redirect
