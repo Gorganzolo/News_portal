@@ -136,6 +136,47 @@
         font-size: 13px;
         color: #2d3748;
     }
+
+    .comment-form-container {
+        margin-bottom: 30px;
+        padding: 20px;
+        background-color: #f7fafc;
+        border: 1px solid #edf2f7;
+        border-radius: 6px;
+    }
+
+    .comment-form-container textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #cbd5e0;
+        border-radius: 6px;
+        font-size: 14px;
+        font-family: inherit;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+        resize: vertical;
+    }
+
+    .comment-form-container textarea:focus {
+        outline: none;
+        border-color: #a0aec0;
+    }
+
+    .btn-submit-comment {
+        background-color: #4a5568;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: background-color 0.2s;
+    }
+
+    .btn-submit-comment:hover {
+        background-color: #2d3748;
+    }
 </style>
 
 <article>
@@ -169,18 +210,40 @@
 
         <div style="flex-grow: 1;"></div> {# Распорка #}
 
-        {% if post.choice == 'NW' %}
-            <a href="{% url 'news_update' post.id %}" class="btn btn-edit">Редактировать</a>
-            <a href="{% url 'news_delete' post.id %}" class="btn btn-delete">Удалить</a>
-        {% elif post.choice == 'AR' %}
-            <a href="{% url 'article_update' post.id %}" class="btn btn-edit">Редактировать</a>
-            <a href="{% url 'article_delete' post.id %}" class="btn btn-delete">Удалить</a>
+        {# Показываем кнопки Редактировать/Удалить только автору поста #}
+        {% if user.is_authenticated and post.author.user == user %}
+            {% if post.choice == 'NW' %}
+                <a href="{% url 'news_update' post.id %}" class="btn btn-edit">Редактировать</a>
+                <a href="{% url 'news_delete' post.id %}" class="btn btn-delete">Удалить</a>
+            {% elif post.choice == 'AR' %}
+                <a href="{% url 'article_update' post.id %}" class="btn btn-edit">Редактировать</a>
+                <a href="{% url 'article_delete' post.id %}" class="btn btn-delete">Удалить</a>
+            {% endif %}
         {% endif %}
     </div>
 
     {# Секция комментариев к посту #}
     <div class="comments-section">
         <h3>Комментарии ({{ post.comment_set.count }})</h3>
+
+        {# Форма добавления комментария #}
+        <div class="comment-form-container">
+            {% if user.is_authenticated %}
+                <form action="{% url 'add_comment' post.id %}" method="post">
+                    {% csrf_token %}
+                    {{ comment_form.comment_text }}
+                    <button type="submit" class="btn-submit-comment">Отправить комментарий</button>
+                </form>
+            {% else %}
+                <p style="margin: 0; color: #4a5568; font-size: 14px;">
+                    <a href="{% url 'account_login' %}?next={{ request.path }}" style="color: #2b6cb0;">Войдите</a>
+                    или
+                    <a href="{% url 'account_signup' %}?next={{ request.path }}" style="color: #2b6cb0;">зарегистрируйтесь</a>,
+                    чтобы оставить комментарий.
+                </p>
+            {% endif %}
+        </div>
+
         {% for comment in post.comment_set.all %}
             <div class="comment-item">
                 <div class="comment-meta">

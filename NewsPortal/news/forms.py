@@ -24,3 +24,16 @@ class UserUpdateForm(forms.ModelForm):
             'last_name': 'Фамилия',
             'email': 'Email',
         }
+
+from .models import Comment
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['comment_text']
+        labels = {
+            'comment_text': 'Текст комментария',
+        }
+        widgets = {
+            'comment_text': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Оставьте свой комментарий...'}),
+        }
