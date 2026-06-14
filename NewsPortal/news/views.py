@@ -112,16 +112,34 @@ class ArticleDeleteView(DeleteView):
 # Профиль и авторизация
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
-from django.views.generic import TemplateView
+from django.views.generic import UpdateView
 from django.contrib.auth.decorators import login_required
 from .models import Author
+from django.contrib.auth.models import User
+from .forms import UserUpdateForm
 
-class ProfileView(LoginRequiredMixin, TemplateView):
+class ProfileView(LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = UserUpdateForm
     template_name = 'news_view/profile.html'
+    success_url = reverse_lazy('profile')
+
+    def get_object(self, queryset=None):
+        return self.request.user
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['is_author'] = self.request.user.groups.filter(name='authors').exists()
+        is_author = self.request.user.groups.filter(name='authors').exists()
+        context['is_author'] = is_author
+
+        if is_author:
+            # Пытаемся получить профиль Author, чтобы вывести посты текущего пользователя
+            try:
+                author_profile = Author.objects.get(user=self.request.user)
+                context['user_posts'] = Post.objects.filter(author=author_profile).order_by('-data_created')
+            except Author.DoesNotExist:
+                context['user_posts'] = []
+
         return context
 
 @login_required
