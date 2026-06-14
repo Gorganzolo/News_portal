@@ -5,15 +5,6 @@
 
 {% block content %}
 <style>
-    .news-count {
-        font-size: 14px;
-        color: var(--text-muted);
-        margin-bottom: 20px;
-        font-weight: 400;
-        border-bottom: 1px solid var(--border-color);
-        padding-bottom: 10px;
-    }
-
     .posts-list {
         list-style: none;
         padding: 0;
@@ -82,11 +73,57 @@
     .pagination a:hover {
         background-color: #f5f5f5;
     }
+
+    .actions-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 15px;
+    }
+
+    .news-count {
+        font-size: 14px;
+        color: var(--text-muted);
+        font-weight: 400;
+        margin: 0;
+    }
+
+    .create-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-create {
+        display: inline-block;
+        padding: 8px 16px;
+        font-size: 14px;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        background-color: transparent;
+        cursor: pointer;
+        border: 1px solid #cbd5e0;
+        color: #2d3748;
+        font-weight: 500;
+    }
+
+    .btn-create:hover {
+        background-color: #edf2f7;
+        border-color: #a0aec0;
+    }
 </style>
 
-{# Количество новостей #}
-<div class="news-count">
-    Всего новостей: {{ paginator.count }}
+{# Шапка с количеством и кнопками создания #}
+<div class="actions-header">
+    <div class="news-count">
+        Всего публикаций: {{ paginator.count }}
+    </div>
+    <div class="create-buttons">
+        <a href="{% url 'news_create' %}" class="btn-create">+ Создать новость</a>
+        <a href="{% url 'article_create' %}" class="btn-create">+ Создать статью</a>
+    </div>
 </div>
 
 {# Список всех постов #}
