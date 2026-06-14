@@ -1,0 +1,106 @@
+{% extends 'default.html' %}
+{% load custom_filters %}
+
+{% block title %}Профиль — News Portal{% endblock title %}
+
+{% block content %}
+<style>
+    .profile-container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 40px;
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .profile-header {
+        margin-top: 0;
+        margin-bottom: 25px;
+        color: #2d3748;
+        font-weight: 600;
+        letter-spacing: -0.5px;
+    }
+    .profile-info {
+        margin-bottom: 30px;
+        padding: 20px;
+        background-color: #f7fafc;
+        border: 1px solid #edf2f7;
+        border-radius: 6px;
+    }
+    .profile-info p {
+        margin: 10px 0;
+        color: #4a5568;
+        font-size: 15px;
+    }
+    .profile-info strong {
+        color: #2d3748;
+    }
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 15px;
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        text-align: center;
+        transition: all 0.2s ease;
+        font-weight: 500;
+        border: 1px solid transparent;
+    }
+    .btn-primary {
+        background-color: #4a5568;
+        color: white;
+    }
+    .btn-primary:hover {
+        background-color: #2d3748;
+    }
+    .btn-outline {
+        background-color: transparent;
+        color: #4a5568;
+        border-color: #cbd5e0;
+    }
+    .btn-outline:hover {
+        background-color: #edf2f7;
+    }
+    .actions {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+</style>
+
+<div class="profile-container">
+    <h2 class="profile-header">Профиль пользователя</h2>
+
+    <div class="profile-info">
+        <p><strong>Имя пользователя (Username):</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email|default:"Не указан" }}</p>
+        <p>
+            <strong>Группы:</strong>
+            {% for group in user.groups.all %}
+                {{ group.name }}{% if not forloop.last %}, {% endif %}
+            {% empty %}
+                Нет групп
+            {% endfor %}
+        </p>
+    </div>
+
+    <div class="actions">
+        {# Если пользователь еще не автор, показываем кнопку #}
+        {% if not is_author %}
+            <form action="{% url 'become_author' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Стать автором</button>
+            </form>
+        {% else %}
+            <span class="btn btn-outline" style="cursor: default;">Вы уже автор</span>
+        {% endif %}
+
+        <form action="/accounts/logout/" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline">Выйти</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}
