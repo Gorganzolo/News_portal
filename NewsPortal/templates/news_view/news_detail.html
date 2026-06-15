@@ -21,6 +21,58 @@
         font-size: 13px;
         color: var(--text-muted);
         font-weight: 300;
+        margin-bottom: 10px;
+    }
+
+    .category-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .category-tag {
+        display: inline-flex;
+        align-items: center;
+        background-color: #edf2f7;
+        padding: 4px 10px;
+        border-radius: 16px;
+        font-size: 12px;
+        color: #4a5568;
+    }
+
+    .category-tag a {
+        color: inherit;
+        text-decoration: none;
+        margin-right: 6px;
+    }
+
+    .btn-subscribe-small {
+        background-color: transparent;
+        border: 1px solid #cbd5e0;
+        border-radius: 12px;
+        padding: 2px 6px;
+        font-size: 10px;
+        cursor: pointer;
+        color: #4a5568;
+    }
+
+    .btn-subscribe-small:hover {
+        background-color: #e2e8f0;
+    }
+
+    .btn-unsubscribe-small {
+        background-color: transparent;
+        border: 1px solid #fc8181;
+        border-radius: 12px;
+        padding: 2px 6px;
+        font-size: 10px;
+        cursor: pointer;
+        color: #e53e3e;
+    }
+
+    .btn-unsubscribe-small:hover {
+        background-color: #fff5f5;
     }
 
     .article-content {
@@ -190,6 +242,27 @@
             <span>{{ post.data_created|date:'d.m.Y' }}</span>
             &nbsp;·&nbsp;
             <span>Рейтинг: {{ post.rating_of_post }}</span>
+        </div>
+
+        <div class="category-tags">
+            {% for category in post.category.all %}
+                <div class="category-tag">
+                    <span style="margin-right: 6px;">{{ category.name_category }}</span>
+                    {% if user.is_authenticated %}
+                        {% if user in category.subscribers.all %}
+                            <form action="{% url 'unsubscribe' category.id %}" method="post" style="margin: 0; display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-unsubscribe-small" title="Отписаться">×</button>
+                            </form>
+                        {% else %}
+                            <form action="{% url 'subscribe' category.id %}" method="post" style="margin: 0; display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-subscribe-small" title="Подписаться">+</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            {% endfor %}
         </div>
     </div>
 

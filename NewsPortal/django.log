@@ -1,0 +1,71 @@
+Watching for file changes with StatReloader
+System check identified some issues:
+
+WARNINGS:
+?: settings.ACCOUNT_EMAIL_REQUIRED is deprecated, use: settings.ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+?: settings.ACCOUNT_USERNAME_REQUIRED is deprecated, use: settings.ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+
+System check identified 2 issues (0 silenced).
+[15/Jun/2026 18:46:00] "GET /accounts/login/ HTTP/1.1" 200 7481
+[15/Jun/2026 18:48:01] "GET /accounts/login/ HTTP/1.1" 200 7481
+[15/Jun/2026 18:49:52] "GET /accounts/login/ HTTP/1.1" 200 7481
+[15/Jun/2026 18:49:54] "POST /accounts/login/ HTTP/1.1" 302 0
+[15/Jun/2026 18:49:54] "GET /news/profile/ HTTP/1.1" 200 12414
+[15/Jun/2026 18:49:56] "POST /news/category/6/subscribe/ HTTP/1.1" 302 0
+[15/Jun/2026 18:49:56] "GET /news/profile/ HTTP/1.1" 200 12461
+[15/Jun/2026 18:49:57] "GET /news/1/ HTTP/1.1" 200 18165
+[15/Jun/2026 18:52:05] "GET /accounts/login/ HTTP/1.1" 200 7481
+[15/Jun/2026 18:52:06] "POST /accounts/login/ HTTP/1.1" 302 0
+[15/Jun/2026 18:52:06] "GET /news/profile/ HTTP/1.1" 200 12461
+[15/Jun/2026 18:53:28] "GET /accounts/login/ HTTP/1.1" 200 7481
+[15/Jun/2026 18:53:30] "POST /accounts/login/ HTTP/1.1" 302 0
+[15/Jun/2026 18:53:30] "GET /news/profile/ HTTP/1.1" 200 12461
+[15/Jun/2026 18:53:31] "POST /news/category/1/subscribe/ HTTP/1.1" 302 0
+[15/Jun/2026 18:53:31] "GET /news/profile/ HTTP/1.1" 200 12508
+[15/Jun/2026 18:53:33] "GET /news/1/ HTTP/1.1" 200 18165
+[15/Jun/2026 18:53:35] "POST /news/category/2/subscribe/ HTTP/1.1" 302 0
+[15/Jun/2026 18:53:35] "GET /news/1/ HTTP/1.1" 200 18168
+/app/NewsPortal/news/signals.py changed, reloading.
+Performing system checks...
+
+June 15, 2026 - 18:41:16
+Django version 6.0.6, using settings 'NewsPortal.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+WARNING: This is a development server. Do not use it in a production setting. Use a production WSGI or ASGI server instead.
+For more information on production servers see: https://docs.djangoproject.com/en/6.0/howto/deployment/
+Watching for file changes with StatReloader
+System check identified some issues:
+
+WARNINGS:
+?: settings.ACCOUNT_EMAIL_REQUIRED is deprecated, use: settings.ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+?: settings.ACCOUNT_USERNAME_REQUIRED is deprecated, use: settings.ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+
+System check identified 2 issues (0 silenced).
+/app/NewsPortal/news/views.py changed, reloading.
+Performing system checks...
+
+June 15, 2026 - 19:00:04
+Django version 6.0.6, using settings 'NewsPortal.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+WARNING: This is a development server. Do not use it in a production setting. Use a production WSGI or ASGI server instead.
+For more information on production servers see: https://docs.djangoproject.com/en/6.0/howto/deployment/
+Watching for file changes with StatReloader
+System check identified some issues:
+
+WARNINGS:
+?: settings.ACCOUNT_EMAIL_REQUIRED is deprecated, use: settings.ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+?: settings.ACCOUNT_USERNAME_REQUIRED is deprecated, use: settings.ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+
+System check identified 2 issues (0 silenced).
+[15/Jun/2026 19:01:07] "GET /accounts/login/ HTTP/1.1" 200 7481
+[15/Jun/2026 19:01:09] "POST /accounts/login/ HTTP/1.1" 302 0
+[15/Jun/2026 19:01:09] "GET /news/profile/ HTTP/1.1" 200 12555
+[15/Jun/2026 19:01:10] "POST /news/category/3/subscribe/ HTTP/1.1" 302 0
+[15/Jun/2026 19:01:10] "GET /news/profile/ HTTP/1.1" 200 12602
+[15/Jun/2026 19:01:12] "GET /news/1/ HTTP/1.1" 200 18171
+[15/Jun/2026 19:01:14] "POST /news/category/4/subscribe/ HTTP/1.1" 302 0
+[15/Jun/2026 19:01:14] "GET /news/1/ HTTP/1.1" 200 18174
