@@ -3,7 +3,8 @@ from .views import (
     PostListView, PostDetailView, PostSearchView,
     NewsCreateView, NewsUpdateView, NewsDeleteView,
     ArticleCreateView, ArticleUpdateView, ArticleDeleteView,
-    like_post, dislike_post, ProfileView, become_author, add_comment
+    like_post, dislike_post, ProfileView, become_author, add_comment,
+    subscribe_to_category, unsubscribe_from_category
 )
 
 urlpatterns = [
@@ -26,6 +27,10 @@ urlpatterns = [
 
     # Комментарии
     path('<int:pk>/comment/', add_comment, name='add_comment'),
+
+    # Подписки
+    path('category/<int:pk>/subscribe/', subscribe_to_category, name='subscribe'),
+    path('category/<int:pk>/unsubscribe/', unsubscribe_from_category, name='unsubscribe'),
 
     # Пути для статей (префикс 'news/' убирается на уровне NewsPortal/urls.py)
     # Обратите внимание: в задании указаны пути /articles/...

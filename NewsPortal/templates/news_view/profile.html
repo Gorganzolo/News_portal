@@ -68,10 +68,29 @@
         gap: 15px;
         flex-wrap: wrap;
     }
-    .author-section {
+    .author-section, .subscriptions-section {
         margin-top: 40px;
         border-top: 1px solid #e2e8f0;
         padding-top: 30px;
+    }
+    .subscriptions-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .subscription-item {
+        border: 1px solid #edf2f7;
+        border-radius: 6px;
+        padding: 15px;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fafafa;
+    }
+    .subscription-item strong {
+        color: #2d3748;
+        font-weight: 500;
     }
     .author-section h3 {
         color: #2d3748;
@@ -161,6 +180,30 @@
             {% csrf_token %}
             <button type="submit" class="btn btn-outline">Выйти</button>
         </form>
+    </div>
+
+    <div class="subscriptions-section">
+        <h3>Мои подписки на категории</h3>
+        <ul class="subscriptions-list">
+            {% for category in categories %}
+                <li class="subscription-item">
+                    <strong>{{ category.name_category }}</strong>
+                    {% if user in category.subscribers.all %}
+                        <form action="{% url 'unsubscribe' category.id %}" method="post" style="margin: 0;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline btn-small" style="color: #e53e3e; border-color: #fc8181;">Отписаться</button>
+                        </form>
+                    {% else %}
+                        <form action="{% url 'subscribe' category.id %}" method="post" style="margin: 0;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary btn-small">Подписаться</button>
+                        </form>
+                    {% endif %}
+                </li>
+            {% empty %}
+                <p style="color: #718096; font-size: 14px;">Категории не найдены.</p>
+            {% endfor %}
+        </ul>
     </div>
 
     {% if is_author %}

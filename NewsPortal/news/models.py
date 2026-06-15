@@ -5,10 +5,15 @@ from django.db.models import Sum
 
 # Категории новостей/статей
 class Category(models.Model):
-    name_category = models.CharField(max_length=100, unique=True)
+    name_category = models.CharField(max_length=100, unique=True, verbose_name="Название категории")
+    subscribers = models.ManyToManyField(User, related_name='subscriptions', blank=True, verbose_name="Подписчики")
 
     def __str__(self):
         return self.name_category
+
+    class Meta:
+        verbose_name = "Категория"
+        verbose_name_plural = "Категории"
 
 # Автор (связан с пользователем)
 class Author(models.Model):

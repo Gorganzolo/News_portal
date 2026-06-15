@@ -163,6 +163,9 @@ class ProfileView(LoginRequiredMixin, UpdateView):
             except Author.DoesNotExist:
                 context['user_posts'] = []
 
+        # Передаем все категории для вывода в профиле
+        context['categories'] = Category.objects.all()
+
         return context
 
 @login_required
@@ -199,3 +202,23 @@ def add_comment(request, pk):
             comment.author_of_comment = request.user
             comment.save()
     return redirect('news_detail', pk=pk)
+
+
+# Подписка на категории
+from .models import Category
+from django.views.decorators.http import require_POST
+
+@login_required
+@require_POST
+def subscribe_to_category(request, pk):
+    category = get_object_or_404(Category, id=pk)
+    category.subscribers.add(request.user)
+    # Возвращаемся на ту страницу, с которой пришли
+    return redirect(request.META.get('HTTP_REFERER', 'profile'))
+
+@login_required
+@require_POST
+def unsubscribe_from_category(request, pk):
+    category = get_object_or_404(Category, id=pk)
+    category.subscribers.remove(request.user)
+    return redirect(request.META.get('HTTP_REFERER', 'profile'))
