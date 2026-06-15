@@ -12,57 +12,71 @@
     }
 
     .post-item {
-        margin-bottom: 45px;
+        margin-bottom: 40px;
+        padding: 24px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .post-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
 
     .post-title {
-        font-size: 20px;
+        font-size: 22px;
         font-weight: 500;
-        margin: 0 0 8px 0;
+        margin: 0 0 10px 0;
         letter-spacing: -0.3px;
     }
 
     .post-title a {
-        color: var(--text-color);
+        color: var(--accent-color);
         text-decoration: none;
     }
 
     .post-title a:hover {
-        opacity: 0.7;
+        color: var(--text-color);
     }
 
     .post-meta {
         font-size: 13px;
         color: var(--text-muted);
-        margin-bottom: 12px;
-        font-weight: 300;
+        margin-bottom: 14px;
+        font-weight: 400;
     }
 
     .post-body-preview {
-        font-size: 15px;
+        font-size: 16px;
         line-height: 1.6;
-        color: #333;
+        color: var(--text-color);
         margin: 0;
         font-weight: 300;
     }
 
     .pagination {
         display: flex;
-        gap: 10px;
-        margin-top: 30px;
-        padding-top: 20px;
+        gap: 8px;
+        margin-top: 40px;
+        padding-top: 30px;
         border-top: 1px solid var(--border-color);
         list-style: none;
         padding-left: 0;
+        justify-content: center;
     }
 
     .pagination a, .pagination span {
-        padding: 5px 10px;
+        padding: 8px 14px;
         text-decoration: none;
         color: var(--text-color);
         border: 1px solid var(--border-color);
-        border-radius: 4px;
+        border-radius: 6px;
         font-size: 14px;
+        background-color: #fff;
+        transition: all 0.2s ease;
     }
 
     .pagination .current {

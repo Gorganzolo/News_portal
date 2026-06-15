@@ -5,15 +5,23 @@ from django.db.models import Sum
 
 # Категории новостей/статей
 class Category(models.Model):
-    name_category = models.CharField(max_length=100, unique=True)
+    name_category = models.CharField(max_length=100, unique=True, verbose_name='Название категории')
+
+    class Meta:
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
 
     def __str__(self):
         return self.name_category
 
 # Автор (связан с пользователем)
 class Author(models.Model):
-    rating = models.IntegerField(default=0)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    rating = models.IntegerField(default=0, verbose_name='Рейтинг')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+
+    class Meta:
+        verbose_name = 'Автор'
+        verbose_name_plural = 'Авторы'
 
     def update_rating(self):
         """Обновляет рейтинг автора по постам и комментариям"""
@@ -38,13 +46,17 @@ class Post(models.Model):
         (news, 'Новость'),
     ]
 
-    data_created = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    category = models.ManyToManyField(Category, through='PostCategory')
-    choice = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=article)
-    title_of_post= models.CharField(max_length=100)
-    text_of_post = models.TextField()
-    rating_of_post = models.IntegerField(default=0)
+    data_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name='Автор')
+    category = models.ManyToManyField(Category, through='PostCategory', verbose_name='Категории')
+    choice = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=article, verbose_name='Тип поста')
+    title_of_post= models.CharField(max_length=100, verbose_name='Заголовок')
+    text_of_post = models.TextField(verbose_name='Текст поста')
+    rating_of_post = models.IntegerField(default=0, verbose_name='Рейтинг поста')
+
+    class Meta:
+        verbose_name = 'Пост'
+        verbose_name_plural = 'Посты'
 
     def like(self):
         """Лайк посту"""
@@ -63,11 +75,15 @@ class Post(models.Model):
 
 # Комментарий к посту
 class Comment(models.Model):
-    link_comment = models.ForeignKey('Post', on_delete=models.CASCADE)
-    author_of_comment = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment_text = models.TextField()
-    date_of_comment = models.DateTimeField(auto_now_add=True)
-    rating_of_comment = models.IntegerField(default=0)
+    link_comment = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name='Пост')
+    author_of_comment = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор комментария')
+    comment_text = models.TextField(verbose_name='Текст комментария')
+    date_of_comment = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    rating_of_comment = models.IntegerField(default=0, verbose_name='Рейтинг комментария')
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
 
     def like(self):
         """Лайк комментарию"""
@@ -82,5 +98,9 @@ class Comment(models.Model):
 
 # Связь поста и категории
 class PostCategory(models.Model):
-    post = models.ForeignKey('Post', on_delete=models.CASCADE)
-    category = models.ForeignKey('Category', on_delete=models.CASCADE)
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name='Пост')
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, verbose_name='Категория')
+
+    class Meta:
+        verbose_name = 'Связь Пост-Категория'
+        verbose_name_plural = 'Связи Пост-Категория'

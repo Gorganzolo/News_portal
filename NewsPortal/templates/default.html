@@ -11,15 +11,16 @@
 
     <style>
         :root {
-            --bg-color: #fcfcfc;
-            --text-color: #1a1a1a;
-            --text-muted: #707070;
-            --border-color: #e5e5e5;
-            --accent-color: #000000;
+            --bg-color: #ffffff; /* Белый фон */
+            --text-color: #2c3e50; /* Мягкий темный текст */
+            --text-muted: #7f8c8d; /* Приглушенный серый */
+            --border-color: #ecf0f1; /* Светлые границы */
+            --accent-color: #34495e; /* Акцентный цвет */
+            --hover-color: #f8f9fa; /* Цвет для ховера */
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
@@ -28,26 +29,30 @@
             flex-direction: column;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
             width: 100%;
-            max-width: 680px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
             box-sizing: border-box;
         }
 
         header {
-            padding: 60px 0 30px 0;
+            padding: 40px 0;
+            background-color: var(--bg-color);
             border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
 
         header h1 {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 600;
             margin: 0;
             letter-spacing: -0.5px;
+            color: var(--accent-color);
         }
 
         header h1 a {
