@@ -159,3 +159,142 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC' # или 'Europe/Moscow'
+
+import os
+
+ADMINS = [
+    ('Admin', 'admin@example.com'),
+]
+
+os.makedirs(BASE_DIR / 'logs', exist_ok=True)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'console_debug': {
+            'format': '{asctime} {levelname} {message}',
+            'style': '{',
+        },
+        'console_warning': {
+            'format': '{asctime} {levelname} {message} {pathname}',
+            'style': '{',
+        },
+        'console_error': {
+            'format': '{asctime} {levelname} {message} {pathname} {exc_info_str}',
+            'style': '{',
+            'class': 'NewsPortal.log_filters.ExcInfoFormatter',
+        },
+        'file_general': {
+            'format': '{asctime} {levelname} {module} {message}',
+            'style': '{',
+        },
+        'file_error': {
+            'format': '{asctime} {levelname} {message} {pathname} {exc_info_str}',
+            'style': '{',
+            'class': 'NewsPortal.log_filters.ExcInfoFormatter',
+        },
+        'file_security': {
+            'format': '{asctime} {levelname} {module} {message}',
+            'style': '{',
+        },
+        'mail_error': {
+            'format': '{asctime} {levelname} {message} {pathname}',
+            'style': '{',
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'filter_debug_info': {
+            '()': 'NewsPortal.log_filters.DebugInfoFilter',
+        },
+        'filter_warning': {
+            '()': 'NewsPortal.log_filters.WarningFilter',
+        },
+        'filter_error_critical': {
+            '()': 'NewsPortal.log_filters.ErrorCriticalFilter',
+        },
+    },
+    'handlers': {
+        'console_debug': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true', 'filter_debug_info'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'console_debug',
+        },
+        'console_warning': {
+            'level': 'WARNING',
+            'filters': ['require_debug_true', 'filter_warning'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'console_warning',
+        },
+        'console_error': {
+            'level': 'ERROR',
+            'filters': ['require_debug_true', 'filter_error_critical'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'console_error',
+        },
+        'file_general': {
+            'level': 'INFO',
+            'filters': ['require_debug_false'],
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs' / 'general.log',
+            'formatter': 'file_general',
+        },
+        'file_errors': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs' / 'errors.log',
+            'formatter': 'file_error',
+        },
+        'file_security': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs' / 'security.log',
+            'formatter': 'file_security',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'NewsPortal.log_filters.CustomAdminEmailHandler',
+            'formatter': 'mail_error',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console_debug', 'console_warning', 'console_error', 'file_general'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['file_errors', 'mail_admins'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.server': {
+            'handlers': ['file_errors', 'mail_admins'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.template': {
+            'handlers': ['file_errors'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'handlers': ['file_errors'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.security': {
+            'handlers': ['file_security'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    }
+}
