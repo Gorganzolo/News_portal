@@ -5,6 +5,7 @@
 
 {% block content %}
 <style>
+    /* Скандинавский стиль: минимализм, много белого пространства, приглушенные цвета */
     .posts-list {
         list-style: none;
         padding: 0;
@@ -12,106 +13,114 @@
     }
 
     .post-item {
-        margin-bottom: 45px;
+        margin-bottom: 40px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #f0f0f0; /* Легкая граница */
+    }
+
+    .post-item:last-child {
+        border-bottom: none;
     }
 
     .post-title {
-        font-size: 20px;
-        font-weight: 500;
-        margin: 0 0 8px 0;
-        letter-spacing: -0.3px;
+        font-size: 22px;
+        font-weight: 400;
+        margin: 0 0 10px 0;
     }
 
     .post-title a {
-        color: var(--text-color);
+        color: #2c3e50; /* Темно-серый/синий */
         text-decoration: none;
+        transition: color 0.3s ease;
     }
 
     .post-title a:hover {
-        opacity: 0.7;
+        color: #7f8c8d; /* Мягкий серый при наведении */
     }
 
     .post-meta {
         font-size: 13px;
-        color: var(--text-muted);
-        margin-bottom: 12px;
+        color: #95a5a6; /* Светло-серый текст */
+        margin-bottom: 15px;
         font-weight: 300;
     }
 
     .post-body-preview {
-        font-size: 15px;
+        font-size: 16px;
         line-height: 1.6;
-        color: #333;
+        color: #555;
         margin: 0;
         font-weight: 300;
     }
 
     .pagination {
         display: flex;
-        gap: 10px;
-        margin-top: 30px;
-        padding-top: 20px;
-        border-top: 1px solid var(--border-color);
+        gap: 8px;
+        margin-top: 40px;
         list-style: none;
         padding-left: 0;
+        justify-content: center; /* Центрируем пагинацию */
     }
 
     .pagination a, .pagination span {
-        padding: 5px 10px;
+        padding: 8px 12px;
         text-decoration: none;
-        color: var(--text-color);
-        border: 1px solid var(--border-color);
+        color: #7f8c8d;
+        background-color: #fff;
+        border: 1px solid #e0e0e0;
         border-radius: 4px;
         font-size: 14px;
+        transition: all 0.2s ease;
     }
 
     .pagination .current {
-        background-color: #eee;
-        font-weight: bold;
+        background-color: #f7f9f9;
+        color: #2c3e50;
+        border-color: #d5dbdb;
     }
 
     .pagination a:hover {
-        background-color: #f5f5f5;
+        background-color: #f4f6f6;
+        color: #34495e;
     }
 
     .actions-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
-        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 30px;
         padding-bottom: 15px;
+        border-bottom: 1px solid #eaeaea;
     }
 
     .news-count {
         font-size: 14px;
-        color: var(--text-muted);
-        font-weight: 400;
-        margin: 0;
+        color: #7f8c8d;
+        font-weight: 300;
     }
 
     .create-buttons {
         display: flex;
-        gap: 10px;
+        gap: 12px;
     }
 
     .btn-create {
         display: inline-block;
         padding: 8px 16px;
-        font-size: 14px;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
         text-decoration: none;
-        border-radius: 6px;
-        transition: all 0.2s ease;
-        background-color: transparent;
-        cursor: pointer;
-        border: 1px solid #cbd5e0;
-        color: #2d3748;
-        font-weight: 500;
+        border-radius: 3px;
+        transition: all 0.3s ease;
+        background-color: #fff;
+        color: #34495e;
+        border: 1px solid #bdc3c7;
     }
 
     .btn-create:hover {
-        background-color: #edf2f7;
-        border-color: #a0aec0;
+        background-color: #f8f9f9;
+        border-color: #95a5a6;
     }
 </style>
 
