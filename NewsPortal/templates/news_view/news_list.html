@@ -4,172 +4,52 @@
 {% block title %}Все публикации — News Portal{% endblock title %}
 
 {% block content %}
-<style>
-    /* Скандинавский стиль: минимализм, много белого пространства, приглушенные цвета */
-    .posts-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .post-item {
-        margin-bottom: 40px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid #f0f0f0; /* Легкая граница */
-    }
-
-    .post-item:last-child {
-        border-bottom: none;
-    }
-
-    .post-title {
-        font-size: 22px;
-        font-weight: 400;
-        margin: 0 0 10px 0;
-    }
-
-    .post-title a {
-        color: #2c3e50; /* Темно-серый/синий */
-        text-decoration: none;
-        transition: color 0.3s ease;
-    }
-
-    .post-title a:hover {
-        color: #7f8c8d; /* Мягкий серый при наведении */
-    }
-
-    .post-meta {
-        font-size: 13px;
-        color: #95a5a6; /* Светло-серый текст */
-        margin-bottom: 15px;
-        font-weight: 300;
-    }
-
-    .post-body-preview {
-        font-size: 16px;
-        line-height: 1.6;
-        color: #555;
-        margin: 0;
-        font-weight: 300;
-    }
-
-    .pagination {
-        display: flex;
-        gap: 8px;
-        margin-top: 40px;
-        list-style: none;
-        padding-left: 0;
-        justify-content: center; /* Центрируем пагинацию */
-    }
-
-    .pagination a, .pagination span {
-        padding: 8px 12px;
-        text-decoration: none;
-        color: #7f8c8d;
-        background-color: #fff;
-        border: 1px solid #e0e0e0;
-        border-radius: 4px;
-        font-size: 14px;
-        transition: all 0.2s ease;
-    }
-
-    .pagination .current {
-        background-color: #f7f9f9;
-        color: #2c3e50;
-        border-color: #d5dbdb;
-    }
-
-    .pagination a:hover {
-        background-color: #f4f6f6;
-        color: #34495e;
-    }
-
-    .actions-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid #eaeaea;
-    }
-
-    .news-count {
-        font-size: 14px;
-        color: #7f8c8d;
-        font-weight: 300;
-    }
-
-    .create-buttons {
-        display: flex;
-        gap: 12px;
-    }
-
-    .btn-create {
-        display: inline-block;
-        padding: 8px 16px;
-        font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        text-decoration: none;
-        border-radius: 3px;
-        transition: all 0.3s ease;
-        background-color: #fff;
-        color: #34495e;
-        border: 1px solid #bdc3c7;
-    }
-
-    .btn-create:hover {
-        background-color: #f8f9f9;
-        border-color: #95a5a6;
-    }
-</style>
-
-{# Шапка с количеством и кнопками создания #}
-<div class="actions-header">
-    <div class="news-count">
-        Всего публикаций: {{ paginator.count }}
-    </div>
-    <div class="create-buttons">
-        <a href="{% url 'news_create' %}" class="btn-create">+ Создать новость</a>
-        <a href="{% url 'article_create' %}" class="btn-create">+ Создать статью</a>
+<!-- Шапка с количеством и кнопками создания -->
+<div>
+    <p>Всего публикаций: {{ paginator.count }}</p>
+    <div>
+        <a href="{% url 'news_create' %}">+ Создать новость</a>
+        <a href="{% url 'article_create' %}">+ Создать статью</a>
     </div>
 </div>
 
-{# Список всех постов #}
-<ul class="posts-list">
+<hr>
+
+<!-- Список всех постов -->
+<ul>
     {% for post in news %}
-        {# Элемент списка для каждого поста #}
-        <li class="post-item">
-            <h2 class="post-title">
-                {# Ссылка на детальную страницу поста #}
+        <!-- Элемент списка для каждого поста -->
+        <li>
+            <h2>
+                <!-- Ссылка на детальную страницу поста -->
                 <a href="{% url 'news_detail' pk=post.id %}">{{ post.title_of_post|censor }}</a>
             </h2>
-            <div class="post-meta">
-                {# Дата публикации в формате день.месяц.год #}
+            <div>
+                <!-- Дата публикации в формате день.месяц.год -->
                 <span>{{ post.data_created|date:'d.m.Y' }}</span>
                 {% if post.category.all %}
                     &nbsp;·&nbsp;
                     <span>
-                        {# Категории поста через запятую #}
+                        <!-- Категории поста через запятую -->
                         {% for cat in post.category.all %}
                             {{ cat.name_category }}{% if not forloop.last %}, {% endif %}
                         {% endfor %}
                     </span>
                 {% endif %}
             </div>
-            {# Первые 20 слов текста поста, с применением цензуры #}
-            <p class="post-body-preview">{{ post.text_of_post|censor|truncatewords:20 }}</p>
+            <!-- Предпросмотр текста поста -->
+            <p>{{ post.text_of_post|censor|truncatewords:20 }}</p>
         </li>
     {% empty %}
-        {# Сообщение, если постов нет #}
+        <!-- Сообщение, если постов нет -->
         <li>Пока здесь пусто.</li>
     {% endfor %}
 </ul>
 
-{# Пагинация #}
+<!-- Пагинация -->
 {% if is_paginated %}
-    <ul class="pagination">
-        {# Ссылка на первую страницу #}
+    <ul>
+        <!-- Ссылка на первую страницу -->
         {% if page_obj.has_previous %}
             <li><a href="?page=1">&laquo; 1</a></li>
             {% if page_obj.previous_page_number != 1 %}
@@ -177,16 +57,16 @@
             {% endif %}
         {% endif %}
 
-        {# Динамический вывод соседних страниц #}
+        <!-- Динамический вывод соседних страниц -->
         {% for num in page_obj.paginator.page_range %}
             {% if page_obj.number == num %}
-                <li><span class="current">{{ num }}</span></li>
+                <li><span>{{ num }}</span></li>
             {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
                 <li><a href="?page={{ num }}">{{ num }}</a></li>
             {% endif %}
         {% endfor %}
 
-        {# Ссылка на последнюю страницу #}
+        <!-- Ссылка на последнюю страницу -->
         {% if page_obj.has_next %}
             {% if page_obj.next_page_number != paginator.num_pages %}
                 <li><a href="?page={{ page_obj.next_page_number }}">Вперед</a></li>
