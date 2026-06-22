@@ -5,28 +5,31 @@
 
 {% block content %}
 <style>
-    /* Скандинавский стиль: мягкие цвета, тонкие линии, воздух */
+    /*
+     * Скандинавский стиль для детальной страницы:
+     * Простор, легко читаемый шрифт, отсутствие резких контрастов
+     */
     .article-header {
         margin-bottom: 30px;
         padding-bottom: 20px;
-        border-bottom: 1px solid #eaeaea;
+        border-bottom: 1px solid #e5e5e5;
     }
 
     .article-title {
-        font-size: 32px;
-        font-weight: 300;
-        margin: 0 0 15px 0;
-        color: #2c3e50;
+        font-size: 28px;
+        font-weight: 500;
+        margin: 0 0 12px 0;
+        color: #1a1a1a;
         line-height: 1.3;
     }
 
     .article-meta {
         font-size: 13px;
-        color: #95a5a6;
-        font-weight: 300;
-        margin-bottom: 15px;
+        color: #8c8c8c;
+        margin-bottom: 16px;
     }
 
+    /* Теги категорий */
     .category-tags {
         display: flex;
         flex-wrap: wrap;
@@ -36,245 +39,209 @@
     .category-tag {
         display: inline-flex;
         align-items: center;
-        background-color: #f4f6f6;
-        padding: 4px 12px;
+        background-color: #fafafa;
+        padding: 4px 10px;
         border-radius: 4px;
         font-size: 12px;
-        color: #7f8c8d;
-        border: 1px solid #e0e0e0;
+        color: #707070;
+        border: 1px solid #e5e5e5;
     }
 
+    /* Кнопки подписки/отписки */
     .btn-subscribe-small, .btn-unsubscribe-small {
-        background-color: transparent;
+        background: none;
         border: none;
-        font-size: 12px;
+        font-size: 14px;
         cursor: pointer;
-        margin-left: 5px;
+        margin-left: 6px;
         padding: 0 4px;
-        border-radius: 2px;
-        transition: all 0.2s ease;
+        transition: color 0.2s ease;
     }
 
     .btn-subscribe-small {
-        color: #2ecc71;
+        color: #4a4a4a;
     }
-
     .btn-subscribe-small:hover {
-        background-color: #eafaf1;
+        color: #1a1a1a;
     }
 
     .btn-unsubscribe-small {
-        color: #e74c3c;
+        color: #a0a0a0;
     }
-
     .btn-unsubscribe-small:hover {
-        background-color: #fdedec;
+        color: #ff4d4f;
     }
 
+    /* Контент публикации */
     .article-content {
         font-size: 16px;
         line-height: 1.8;
-        color: #4a4a4a;
-        font-weight: 300;
+        color: #333;
     }
 
-    .comments-section {
-        margin-top: 50px;
-        padding-top: 30px;
-        border-top: 1px solid #eaeaea;
-    }
-
-    .comments-section h3 {
-        font-weight: 400;
-        color: #2c3e50;
-        margin-bottom: 20px;
-    }
-
-    .comment-item {
-        margin-bottom: 25px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid #f0f0f0;
-    }
-
-    .comment-meta {
-        font-size: 12px;
-        color: #95a5a6;
-        margin-bottom: 8px;
-    }
-
-    .comment-meta strong {
-        color: #34495e;
-        font-weight: 500;
-    }
-
-    .comment-text {
-        font-size: 14px;
-        color: #555;
-        line-height: 1.5;
-        margin: 0;
-    }
-
-    .back-link {
-        display: inline-block;
-        margin-top: 40px;
-        font-size: 14px;
-        text-decoration: none;
-        color: #7f8c8d;
-        border-bottom: 1px solid transparent;
-        transition: all 0.2s ease;
-    }
-
-    .back-link:hover {
-        color: #34495e;
-        border-bottom-color: #34495e;
-    }
-
+    /* Панель с действиями под статьей */
     .action-buttons {
         display: flex;
         gap: 12px;
-        margin-top: 30px;
-        margin-bottom: 40px;
+        margin-top: 40px;
         align-items: center;
         flex-wrap: wrap;
     }
 
     .btn {
-        display: inline-block;
-        padding: 6px 14px;
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 14px;
         font-size: 13px;
         text-decoration: none;
-        border-radius: 3px;
-        transition: all 0.3s ease;
+        border-radius: 4px;
         background-color: #fff;
+        border: 1px solid #e5e5e5;
+        color: #4a4a4a;
+        transition: all 0.2s ease;
         cursor: pointer;
-        border: 1px solid #bdc3c7;
-        color: #34495e;
     }
 
     .btn:hover {
-        background-color: #f8f9f9;
-        border-color: #95a5a6;
-    }
-
-    .btn-edit {
-        color: #34495e;
-    }
-
-    .btn-delete {
-        color: #e74c3c;
-        border-color: #f5b7b1;
+        background-color: #f5f5f5;
+        border-color: #d9d9d9;
+        color: #1a1a1a;
     }
 
     .btn-delete:hover {
-        background-color: #fdedec;
-        border-color: #e74c3c;
-    }
-
-    .btn-like {
-        color: #27ae60;
-        border-color: #a9dfbf;
-    }
-
-    .btn-like:hover {
-        background-color: #eafaf1;
-        border-color: #27ae60;
-    }
-
-    .btn-dislike {
-        color: #e74c3c;
-        border-color: #f5b7b1;
-    }
-
-    .btn-dislike:hover {
-        background-color: #fdedec;
-        border-color: #e74c3c;
+        color: #ff4d4f;
+        border-color: #ffccc7;
     }
 
     .rating-badge {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 6px 14px;
-        background-color: #f4f6f6;
-        border: 1px solid #e0e0e0;
-        border-radius: 3px;
-        font-weight: 400;
+        padding: 8px 14px;
+        background-color: #fafafa;
+        border: 1px solid #e5e5e5;
+        border-radius: 4px;
         font-size: 13px;
-        color: #34495e;
+        color: #4a4a4a;
     }
 
+    /* Блок комментариев */
+    .comments-section {
+        margin-top: 50px;
+        padding-top: 30px;
+        border-top: 1px solid #e5e5e5;
+    }
+
+    .comments-section h3 {
+        font-size: 20px;
+        font-weight: 500;
+        color: #1a1a1a;
+        margin-bottom: 20px;
+    }
+
+    .comment-item {
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .comment-meta {
+        font-size: 13px;
+        color: #8c8c8c;
+        margin-bottom: 6px;
+    }
+
+    .comment-meta strong {
+        color: #1a1a1a;
+        font-weight: 500;
+    }
+
+    .comment-text {
+        font-size: 15px;
+        color: #4a4a4a;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    /* Форма комментария */
     .comment-form-container {
-        margin-bottom: 40px;
-        padding: 25px;
-        background-color: #fcfcfc;
-        border: 1px solid #eaeaea;
+        margin-bottom: 30px;
+        padding: 20px;
+        background-color: #fafafa;
+        border: 1px solid #e5e5e5;
         border-radius: 4px;
     }
 
     .comment-form-container textarea {
         width: 100%;
         padding: 12px;
-        border: 1px solid #e0e0e0;
-        border-radius: 3px;
+        border: 1px solid #e5e5e5;
+        border-radius: 4px;
         font-size: 14px;
         font-family: inherit;
         box-sizing: border-box;
-        margin-bottom: 15px;
+        margin-bottom: 12px;
         resize: vertical;
         transition: border-color 0.2s ease;
     }
 
     .comment-form-container textarea:focus {
         outline: none;
-        border-color: #bdc3c7;
+        border-color: #b3b3b3;
     }
 
     .btn-submit-comment {
         background-color: #fff;
-        color: #34495e;
-        border: 1px solid #bdc3c7;
-        padding: 8px 18px;
-        border-radius: 3px;
+        color: #1a1a1a;
+        border: 1px solid #e5e5e5;
+        padding: 8px 16px;
+        border-radius: 4px;
         cursor: pointer;
         font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        transition: all 0.3s ease;
+        transition: all 0.2s ease;
     }
 
     .btn-submit-comment:hover {
-        background-color: #f8f9f9;
-        border-color: #95a5a6;
+        background-color: #f5f5f5;
+        border-color: #d9d9d9;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 30px;
+        font-size: 14px;
+        text-decoration: none;
+        color: #8c8c8c;
+    }
+
+    .back-link:hover {
+        color: #1a1a1a;
     }
 </style>
 
 <article>
-    {# Заголовок статьи и метаданные #}
+    <!-- Заголовок публикации и мета-информация -->
     <div class="article-header">
         <h1 class="article-title">{{ post.title_of_post|censor }}</h1>
         <div class="article-meta">
-            <span>Автор: {{ post.author.user.username }}</span>
-            &nbsp;·&nbsp;
-            {# Дата публикации в формате день.месяц.год #}
-            <span>{{ post.data_created|date:'d.m.Y' }}</span>
-            &nbsp;·&nbsp;
+            <!-- Выводим автора, дату и рейтинг -->
+            <span>Автор: {{ post.author.user.username }}</span> &nbsp;·&nbsp;
+            <span>{{ post.data_created|date:'d.m.Y' }}</span> &nbsp;·&nbsp;
             <span>Рейтинг: {{ post.rating_of_post }}</span>
         </div>
 
+        <!-- Категории и кнопки подписки -->
         <div class="category-tags">
             {% for category in post.category.all %}
                 <div class="category-tag">
-                    <span style="margin-right: 6px;">{{ category.name_category }}</span>
+                    <span>{{ category.name_category }}</span>
                     {% if user.is_authenticated %}
                         {% if user in category.subscribers.all %}
                             <form action="{% url 'unsubscribe' category.id %}" method="post" style="margin: 0; display: inline;">
                                 {% csrf_token %}
-                                <button type="submit" class="btn-unsubscribe-small" title="Отписаться">×</button>
+                                <button type="submit" class="btn-unsubscribe-small" title="Отписаться от категории">&times;</button>
                             </form>
                         {% else %}
                             <form action="{% url 'subscribe' category.id %}" method="post" style="margin: 0; display: inline;">
                                 {% csrf_token %}
-                                <button type="submit" class="btn-subscribe-small" title="Подписаться">+</button>
+                                <button type="submit" class="btn-subscribe-small" title="Подписаться на категорию">+</button>
                             </form>
                         {% endif %}
                     {% endif %}
@@ -283,57 +250,56 @@
         </div>
     </div>
 
-    {# Основной текст статьи #}
+    <!-- Текст публикации -->
     <div class="article-content">
         {{ post.text_of_post|censor|linebreaks }}
     </div>
 
-    {# Кнопки действий: Лайк, Дизлайк, Редактировать, Удалить #}
+    <!-- Блок действий с публикацией -->
     <div class="action-buttons">
-        <a href="{% url 'like_post' post.id %}" class="btn btn-like">
-            👍 Лайк
-        </a>
+        <a href="{% url 'like_post' post.id %}" class="btn">Лайк</a>
         <span class="rating-badge">Рейтинг: {{ post.rating_of_post }}</span>
-        <a href="{% url 'dislike_post' post.id %}" class="btn btn-dislike">
-            👎 Дизлайк
-        </a>
+        <a href="{% url 'dislike_post' post.id %}" class="btn">Дизлайк</a>
 
-        <div style="flex-grow: 1;"></div> {# Распорка #}
+        <!-- Расширитель для смещения кнопок вправо -->
+        <div style="flex-grow: 1;"></div>
 
-        {# Показываем кнопки Редактировать/Удалить только автору поста #}
+        <!-- Кнопки редактирования (только для автора) -->
         {% if user.is_authenticated and post.author.user == user %}
             {% if post.choice == 'NW' %}
-                <a href="{% url 'news_update' post.id %}" class="btn btn-edit">Редактировать</a>
+                <a href="{% url 'news_update' post.id %}" class="btn">Редактировать</a>
                 <a href="{% url 'news_delete' post.id %}" class="btn btn-delete">Удалить</a>
             {% elif post.choice == 'AR' %}
-                <a href="{% url 'article_update' post.id %}" class="btn btn-edit">Редактировать</a>
+                <a href="{% url 'article_update' post.id %}" class="btn">Редактировать</a>
                 <a href="{% url 'article_delete' post.id %}" class="btn btn-delete">Удалить</a>
             {% endif %}
         {% endif %}
     </div>
 
-    {# Секция комментариев к посту #}
+    <!-- Секция комментариев -->
     <div class="comments-section">
         <h3>Комментарии ({{ post.comment_set.count }})</h3>
 
-        {# Форма добавления комментария #}
+        <!-- Форма для нового комментария -->
         <div class="comment-form-container">
             {% if user.is_authenticated %}
                 <form action="{% url 'add_comment' post.id %}" method="post">
                     {% csrf_token %}
+                    <!-- Поле ввода текста -->
                     {{ comment_form.comment_text }}
-                    <button type="submit" class="btn-submit-comment">Отправить комментарий</button>
+                    <button type="submit" class="btn-submit-comment">Отправить</button>
                 </form>
             {% else %}
-                <p style="margin: 0; color: #4a5568; font-size: 14px;">
-                    <a href="{% url 'account_login' %}?next={{ request.path }}" style="color: #2b6cb0;">Войдите</a>
+                <p style="margin: 0; color: #707070; font-size: 14px;">
+                    <a href="{% url 'account_login' %}?next={{ request.path }}" style="color: #1a1a1a;">Войдите</a>
                     или
-                    <a href="{% url 'account_signup' %}?next={{ request.path }}" style="color: #2b6cb0;">зарегистрируйтесь</a>,
+                    <a href="{% url 'account_signup' %}?next={{ request.path }}" style="color: #1a1a1a;">зарегистрируйтесь</a>,
                     чтобы оставить комментарий.
                 </p>
             {% endif %}
         </div>
 
+        <!-- Список комментариев -->
         {% for comment in post.comment_set.all %}
             <div class="comment-item">
                 <div class="comment-meta">
@@ -343,11 +309,11 @@
                 <p class="comment-text">{{ comment.comment_text|censor }}</p>
             </div>
         {% empty %}
-            <p>Комментариев пока нет.</p>
+            <p style="color: #8c8c8c; font-size: 14px;">Комментариев пока нет.</p>
         {% endfor %}
     </div>
 
-    {# Ссылка для возврата на главную #}
-    <a href="/news/" class="back-link">&larr; Вернуться к потоку</a>
+    <!-- Ссылка назад -->
+    <a href="/news/" class="back-link">&larr; Вернуться к публикациям</a>
 </article>
 {% endblock content %}

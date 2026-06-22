@@ -5,7 +5,11 @@
 
 {% block content %}
 <style>
-    /* Скандинавский стиль: минимализм, много белого пространства, приглушенные цвета */
+    /*
+     * Скандинавский стиль:
+     * Минимализм, белый/светло-серый фон, приглушенные цвета текста,
+     * отсутствие лишних теней и ярких акцентов.
+     */
     .posts-list {
         list-style: none;
         padding: 0;
@@ -13,9 +17,9 @@
     }
 
     .post-item {
-        margin-bottom: 40px;
+        margin-bottom: 30px;
         padding-bottom: 20px;
-        border-bottom: 1px solid #f0f0f0; /* Легкая граница */
+        border-bottom: 1px solid #e5e5e5; /* Очень мягкая граница */
     }
 
     .post-item:last-child {
@@ -23,153 +27,150 @@
     }
 
     .post-title {
-        font-size: 22px;
-        font-weight: 400;
-        margin: 0 0 10px 0;
+        font-size: 20px;
+        font-weight: 500;
+        margin: 0 0 8px 0;
     }
 
     .post-title a {
-        color: #2c3e50; /* Темно-серый/синий */
+        color: #1a1a1a; /* Темно-серый, почти черный */
         text-decoration: none;
-        transition: color 0.3s ease;
+        transition: color 0.2s ease;
     }
 
     .post-title a:hover {
-        color: #7f8c8d; /* Мягкий серый при наведении */
+        color: #707070; /* Мягкий серый при наведении */
     }
 
     .post-meta {
         font-size: 13px;
-        color: #95a5a6; /* Светло-серый текст */
-        margin-bottom: 15px;
-        font-weight: 300;
+        color: #8c8c8c; /* Приглушенный текст */
+        margin-bottom: 12px;
     }
 
     .post-body-preview {
-        font-size: 16px;
+        font-size: 15px;
         line-height: 1.6;
-        color: #555;
+        color: #4a4a4a;
         margin: 0;
-        font-weight: 300;
     }
 
+    /* Пагинация */
     .pagination {
         display: flex;
         gap: 8px;
         margin-top: 40px;
         list-style: none;
-        padding-left: 0;
-        justify-content: center; /* Центрируем пагинацию */
+        padding: 0;
+        justify-content: center;
     }
 
     .pagination a, .pagination span {
-        padding: 8px 12px;
+        padding: 6px 12px;
         text-decoration: none;
-        color: #7f8c8d;
-        background-color: #fff;
-        border: 1px solid #e0e0e0;
+        color: #707070;
+        background-color: #fafafa;
+        border: 1px solid #e5e5e5;
         border-radius: 4px;
         font-size: 14px;
         transition: all 0.2s ease;
     }
 
     .pagination .current {
-        background-color: #f7f9f9;
-        color: #2c3e50;
-        border-color: #d5dbdb;
+        background-color: #f0f0f0;
+        color: #1a1a1a;
+        border-color: #d9d9d9;
     }
 
     .pagination a:hover {
-        background-color: #f4f6f6;
-        color: #34495e;
+        background-color: #f5f5f5;
+        color: #1a1a1a;
     }
 
+    /* Блок с действиями (счетчик и кнопки) */
     .actions-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 30px;
         padding-bottom: 15px;
-        border-bottom: 1px solid #eaeaea;
+        border-bottom: 1px solid #e5e5e5;
     }
 
     .news-count {
         font-size: 14px;
-        color: #7f8c8d;
-        font-weight: 300;
+        color: #707070;
     }
 
     .create-buttons {
         display: flex;
-        gap: 12px;
+        gap: 10px;
     }
 
     .btn-create {
         display: inline-block;
-        padding: 8px 16px;
+        padding: 8px 14px;
         font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
         text-decoration: none;
-        border-radius: 3px;
-        transition: all 0.3s ease;
+        border-radius: 4px;
         background-color: #fff;
-        color: #34495e;
-        border: 1px solid #bdc3c7;
+        color: #1a1a1a;
+        border: 1px solid #e5e5e5;
+        transition: all 0.2s ease;
     }
 
     .btn-create:hover {
-        background-color: #f8f9f9;
-        border-color: #95a5a6;
+        background-color: #f5f5f5;
+        border-color: #d9d9d9;
     }
 </style>
 
-{# Шапка с количеством и кнопками создания #}
+<!-- Шапка страницы: количество новостей и кнопки создания -->
 <div class="actions-header">
     <div class="news-count">
+        <!-- Выводим общее количество публикаций -->
         Всего публикаций: {{ paginator.count }}
     </div>
     <div class="create-buttons">
-        <a href="{% url 'news_create' %}" class="btn-create">+ Создать новость</a>
-        <a href="{% url 'article_create' %}" class="btn-create">+ Создать статью</a>
+        <!-- Ссылки для создания новых записей -->
+        <a href="{% url 'news_create' %}" class="btn-create">Добавить новость</a>
+        <a href="{% url 'article_create' %}" class="btn-create">Добавить статью</a>
     </div>
 </div>
 
-{# Список всех постов #}
+<!-- Список публикаций -->
 <ul class="posts-list">
     {% for post in news %}
-        {# Элемент списка для каждого поста #}
         <li class="post-item">
             <h2 class="post-title">
-                {# Ссылка на детальную страницу поста #}
+                <!-- Заголовок новости является ссылкой на детальную страницу -->
                 <a href="{% url 'news_detail' pk=post.id %}">{{ post.title_of_post|censor }}</a>
             </h2>
             <div class="post-meta">
-                {# Дата публикации в формате день.месяц.год #}
+                <!-- Выводим дату публикации -->
                 <span>{{ post.data_created|date:'d.m.Y' }}</span>
                 {% if post.category.all %}
                     &nbsp;·&nbsp;
                     <span>
-                        {# Категории поста через запятую #}
+                        <!-- Выводим категории -->
                         {% for cat in post.category.all %}
                             {{ cat.name_category }}{% if not forloop.last %}, {% endif %}
                         {% endfor %}
                     </span>
                 {% endif %}
             </div>
-            {# Первые 20 слов текста поста, с применением цензуры #}
+            <!-- Предпросмотр текста новости -->
             <p class="post-body-preview">{{ post.text_of_post|censor|truncatewords:20 }}</p>
         </li>
     {% empty %}
-        {# Сообщение, если постов нет #}
+        <!-- Если новостей нет -->
         <li>Пока здесь пусто.</li>
     {% endfor %}
 </ul>
 
-{# Пагинация #}
+<!-- Постраничная навигация (Пагинация) -->
 {% if is_paginated %}
     <ul class="pagination">
-        {# Ссылка на первую страницу #}
         {% if page_obj.has_previous %}
             <li><a href="?page=1">&laquo; 1</a></li>
             {% if page_obj.previous_page_number != 1 %}
@@ -177,7 +178,6 @@
             {% endif %}
         {% endif %}
 
-        {# Динамический вывод соседних страниц #}
         {% for num in page_obj.paginator.page_range %}
             {% if page_obj.number == num %}
                 <li><span class="current">{{ num }}</span></li>
@@ -186,7 +186,6 @@
             {% endif %}
         {% endfor %}
 
-        {# Ссылка на последнюю страницу #}
         {% if page_obj.has_next %}
             {% if page_obj.next_page_number != paginator.num_pages %}
                 <li><a href="?page={{ page_obj.next_page_number }}">Вперед</a></li>
