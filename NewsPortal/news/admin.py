@@ -1,51 +1,38 @@
 from django.contrib import admin
 from .models import Author, Category, Post, Comment, PostCategory
 
-# Регистрируем модели в админке для удобного управления
-
+# Настройки для модели Автор
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
-    """
-    Настройки отображения модели Автор в админке.
-    """
     # Поля для отображения в списке
     list_display = ('user', 'rating')
     # Поля для поиска
     search_fields = ('user__username',)
 
+# Настройки для модели Категория
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    """
-    Настройки отображения модели Категория в админке.
-    """
     list_display = ('name_category',)
     search_fields = ('name_category',)
 
+# Настройки для модели Публикация
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    """
-    Настройки отображения модели Публикация в админке.
-    """
-    # Показываем ключевую информацию о посте
+    # Основная информация о публикации
     list_display = ('title_of_post', 'author', 'choice', 'data_created', 'rating_of_post')
-    # Фильтры сбоку
+    # Боковые фильтры
     list_filter = ('choice', 'author', 'data_created')
+    # Поиск по заголовку и тексту
     search_fields = ('title_of_post', 'text_of_post')
 
+# Настройки для модели Комментарий
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    """
-    Настройки отображения модели Комментарий в админке.
-    """
-    # Показываем инфу о комментарии
     list_display = ('author_of_comment', 'link_comment', 'date_of_comment', 'rating_of_comment')
     list_filter = ('date_of_comment', 'author_of_comment')
     search_fields = ('comment_text',)
 
-# Промежуточную таблицу тоже можно зарегистрировать, если нужно
+# Настройки для промежуточной таблицы Категория-Пост
 @admin.register(PostCategory)
 class PostCategoryAdmin(admin.ModelAdmin):
-    """
-    Настройки отображения промежуточной таблицы Категория поста в админке.
-    """
     list_display = ('post', 'category')
