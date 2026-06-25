@@ -4,6 +4,7 @@
 {% block title %}{{ post.title_of_post|censor }} — News Portal{% endblock title %}
 
 {% block content %}
+{# Страница отображения отдельной новости/статьи #}
 <style>
     /* Скандинавский стиль: мягкие цвета, тонкие линии, воздух */
     .article-header {
@@ -285,6 +286,7 @@
 
     {# Основной текст статьи #}
     <div class="article-content">
+        {# Отображение текста новости #}
         {{ post.text_of_post|censor|linebreaks }}
     </div>
 
