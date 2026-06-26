@@ -1,51 +1,42 @@
 from django.contrib import admin
 from .models import Author, Category, Post, Comment, PostCategory
 
-# Регистрируем модели в админке для удобного управления
+# Настройки для админ-панели
 
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
-    """
-    Настройки отображения модели Автор в админке.
-    """
-    # Поля для отображения в списке
+    # Настройки для модели Автор
     list_display = ('user', 'rating')
-    # Поля для поиска
     search_fields = ('user__username',)
+    empty_value_display = '-пусто-'
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    """
-    Настройки отображения модели Категория в админке.
-    """
+    # Настройки для модели Категория
     list_display = ('name_category',)
     search_fields = ('name_category',)
+    empty_value_display = '-пусто-'
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    """
-    Настройки отображения модели Публикация в админке.
-    """
-    # Показываем ключевую информацию о посте
+    # Настройки для модели Публикация (Пост)
     list_display = ('title_of_post', 'author', 'choice', 'data_created', 'rating_of_post')
-    # Фильтры сбоку
     list_filter = ('choice', 'author', 'data_created')
     search_fields = ('title_of_post', 'text_of_post')
+    date_hierarchy = 'data_created'
+    empty_value_display = '-пусто-'
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    """
-    Настройки отображения модели Комментарий в админке.
-    """
-    # Показываем инфу о комментарии
+    # Настройки для модели Комментарий
     list_display = ('author_of_comment', 'link_comment', 'date_of_comment', 'rating_of_comment')
     list_filter = ('date_of_comment', 'author_of_comment')
     search_fields = ('comment_text',)
+    date_hierarchy = 'date_of_comment'
+    empty_value_display = '-пусто-'
 
-# Промежуточную таблицу тоже можно зарегистрировать, если нужно
 @admin.register(PostCategory)
 class PostCategoryAdmin(admin.ModelAdmin):
-    """
-    Настройки отображения промежуточной таблицы Категория поста в админке.
-    """
+    # Настройки для модели Категория поста
     list_display = ('post', 'category')
+    empty_value_display = '-пусто-'
