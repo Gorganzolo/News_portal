@@ -12,6 +12,8 @@ class AuthorAdmin(admin.ModelAdmin):
     list_display = ('user', 'rating')
     # Поля для поиска
     search_fields = ('user__username',)
+    # Фильтрация по рейтингу
+    list_filter = ('rating',)
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -30,7 +32,10 @@ class PostAdmin(admin.ModelAdmin):
     list_display = ('title_of_post', 'author', 'choice', 'data_created', 'rating_of_post')
     # Фильтры сбоку
     list_filter = ('choice', 'author', 'data_created')
+    # Поля для поиска
     search_fields = ('title_of_post', 'text_of_post')
+    # Навигация по датам
+    date_hierarchy = 'data_created'
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
@@ -39,10 +44,14 @@ class CommentAdmin(admin.ModelAdmin):
     """
     # Показываем инфу о комментарии
     list_display = ('author_of_comment', 'link_comment', 'date_of_comment', 'rating_of_comment')
+    # Фильтры сбоку
     list_filter = ('date_of_comment', 'author_of_comment')
+    # Поля для поиска
     search_fields = ('comment_text',)
+    # Навигация по датам
+    date_hierarchy = 'date_of_comment'
 
-# Промежуточную таблицу тоже можно зарегистрировать, если нужно
+# Промежуточная таблица
 @admin.register(PostCategory)
 class PostCategoryAdmin(admin.ModelAdmin):
     """
