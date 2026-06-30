@@ -10,6 +10,8 @@ class AuthorAdmin(admin.ModelAdmin):
     """
     # Поля для отображения в списке
     list_display = ('user', 'rating')
+    # Поля, которые будут ссылками на страницу редактирования
+    list_display_links = ('user',)
     # Поля для поиска
     search_fields = ('user__username',)
 
@@ -19,6 +21,7 @@ class CategoryAdmin(admin.ModelAdmin):
     Настройки отображения модели Категория в админке.
     """
     list_display = ('name_category',)
+    list_display_links = ('name_category',)
     search_fields = ('name_category',)
 
 @admin.register(Post)
@@ -28,9 +31,12 @@ class PostAdmin(admin.ModelAdmin):
     """
     # Показываем ключевую информацию о посте
     list_display = ('title_of_post', 'author', 'choice', 'data_created', 'rating_of_post')
+    list_display_links = ('title_of_post',)
     # Фильтры сбоку
     list_filter = ('choice', 'author', 'data_created')
     search_fields = ('title_of_post', 'text_of_post')
+    # Иерархия по дате для удобной навигации
+    date_hierarchy = 'data_created'
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
@@ -39,8 +45,11 @@ class CommentAdmin(admin.ModelAdmin):
     """
     # Показываем инфу о комментарии
     list_display = ('author_of_comment', 'link_comment', 'date_of_comment', 'rating_of_comment')
+    list_display_links = ('author_of_comment', 'link_comment')
     list_filter = ('date_of_comment', 'author_of_comment')
     search_fields = ('comment_text',)
+    # Иерархия по дате для удобной навигации
+    date_hierarchy = 'date_of_comment'
 
 # Промежуточную таблицу тоже можно зарегистрировать, если нужно
 @admin.register(PostCategory)
@@ -49,3 +58,4 @@ class PostCategoryAdmin(admin.ModelAdmin):
     Настройки отображения промежуточной таблицы Категория поста в админке.
     """
     list_display = ('post', 'category')
+    list_display_links = ('post', 'category')
